@@ -10,7 +10,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.repository.configuration.JdbcJobConfigurationRepositoryConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.repository.server.configuration.EnableSpringBatchLightminRemoteRepositoryServer;
 import org.tuxdevelop.spring.batch.lightmin.test.util.ITJdbcJobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.test.util.ITJobConfigurationRepository;
@@ -20,15 +20,15 @@ import javax.sql.DataSource;
 @Configuration
 @EnableSpringBatchLightminRemoteRepositoryServer
 @PropertySource(value = {"classpath:it_properties/jdbc_configuration.properties"})
-@EnableConfigurationProperties(value = {SpringBatchLightminConfigurationProperties.class})
+@EnableConfigurationProperties(value = {JdbcJobConfigurationRepositoryConfigurationProperties.class})
 public class JdbcIntegrationTestConfiguration {
 
     @Bean
     public ITJobConfigurationRepository itJobConfigurationRepository(final JdbcTemplate jdbcTemplate,
                                                                      final PlatformTransactionManager platformTransactionManager,
-                                                                     final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+                                                                     final JdbcJobConfigurationRepositoryConfigurationProperties properties) {
         return new ITJdbcJobConfigurationRepository(jdbcTemplate, AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX,
-                platformTransactionManager, springBatchLightminConfigurationProperties);
+                platformTransactionManager, properties);
     }
 
     @Bean

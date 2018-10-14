@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLightmin;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
 
 @Configuration
 @EnableSpringBatchLightmin
+@EnableLightminMapConfigurationRepository
 @EnableConfigurationProperties(value = {SpringBatchLightminConfigurationProperties.class})
 @PropertySource("classpath:properties/map.properties")
 @Import(value = {ITJobConfiguration.class})

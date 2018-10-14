@@ -1,15 +1,15 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration;
 
 /**
  * @author Marcel Becker
  * @since 0.3
  */
-public interface ListenerService extends JobLauncherService{
+public interface ListenerService extends JobLauncherService {
 
     /**
-     * Registers a {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration}
+     * Registers a {@link org.tuxdevelop.spring.batch.lightmin.domain.JobListenerConfiguration}
      * of a given {@link JobConfiguration} within the spring context
      *
      * @param jobConfiguration the jobConfiguration to register
@@ -25,7 +25,7 @@ public interface ListenerService extends JobLauncherService{
     void unregisterListenerForJob(String beanName);
 
     /**
-     * * Refreshes a {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration}
+     * * Refreshes a {@link org.tuxdevelop.spring.batch.lightmin.domain.JobListenerConfiguration}
      * of a given {@link JobConfiguration} within the spring context
      *
      * @param jobConfiguration

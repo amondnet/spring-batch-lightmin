@@ -10,9 +10,9 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.tuxdevelop.spring.batch.lightmin.TestHelper;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
+import org.tuxdevelop.spring.batch.lightmin.domain.*;
+import org.tuxdevelop.spring.batch.lightmin.test.domain.DomainTestHelper;
 import org.tuxdevelop.test.configuration.ITConfiguration;
 
 import java.util.HashSet;
@@ -68,9 +68,9 @@ public class BeanRegistrarIT {
 
     @Test
     public void registerPeriodSchedulerIT() {
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
+        final JobSchedulerConfiguration jobSchedulerConfiguration = DomainTestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         final ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.initialize();
         final SchedulerConstructorWrapper schedulerConstructorWrapper = new SchedulerConstructorWrapper();

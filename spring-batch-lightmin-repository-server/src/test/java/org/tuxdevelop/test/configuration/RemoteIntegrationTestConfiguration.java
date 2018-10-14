@@ -4,15 +4,15 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.RemoteJobConfigurationRepositoryLocator;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.UrlRemoteJobConfigurationRepositoryLocator;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminRemoteConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.repository.server.configuration.EnableSpringBatchLightminRemoteRepositoryServer;
 import org.tuxdevelop.spring.batch.lightmin.test.util.ITJobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.test.util.ITMapJobConfigurationRepository;
 
 @Configuration
 @EnableAutoConfiguration
+@EnableLightminRemoteConfigurationRepository
 @EnableSpringBatchLightminRemoteRepositoryServer
 @EnableConfigurationProperties(value = {SpringBatchLightminConfigurationProperties.class})
 public class RemoteIntegrationTestConfiguration {
@@ -22,10 +22,5 @@ public class RemoteIntegrationTestConfiguration {
         return new ITMapJobConfigurationRepository();
     }
 
-    @Bean
-    public RemoteJobConfigurationRepositoryLocator remoteJobConfigurationRepositoryLocator(
-            SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
-        return new UrlRemoteJobConfigurationRepositoryLocator(springBatchLightminConfigurationProperties);
-    }
 
 }

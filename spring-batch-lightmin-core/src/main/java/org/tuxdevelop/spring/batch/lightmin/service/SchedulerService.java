@@ -1,21 +1,21 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.SchedulerStatus;
 
 /**
  * @author Marcel Becker
  * @since 0.1
  */
-public interface SchedulerService extends JobLauncherService,InitializingBean {
+public interface SchedulerService extends JobLauncherService, InitializingBean {
 
     /**
      * Registers a {@link org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler} for a given
-     * {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration}
+     * {@link org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration}
      *
-     * @param jobConfiguration the {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration}
-     *                         containing the {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration}
+     * @param jobConfiguration the {@link org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration}
+     *                         containing the {@link org.tuxdevelop.spring.batch.lightmin.domain.JobSchedulerConfiguration}
      * @return the bean name of the registered {@link org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler}
      */
     String registerSchedulerForJob(JobConfiguration jobConfiguration);
@@ -30,10 +30,10 @@ public interface SchedulerService extends JobLauncherService,InitializingBean {
 
     /**
      * Reloads the {@link org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler} for a given
-     * {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration} within the current Spring context
+     * {@link org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration} within the current Spring context
      *
-     * @param jobConfiguration the {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration}
-     *                         containing the {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration}
+     * @param jobConfiguration the {@link org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration}
+     *                         containing the {@link org.tuxdevelop.spring.batch.lightmin.domain.JobSchedulerConfiguration}
      */
     void refreshSchedulerForJob(JobConfiguration jobConfiguration);
 
@@ -41,7 +41,7 @@ public interface SchedulerService extends JobLauncherService,InitializingBean {
      * Triggers the scheduler of Spring Bean with the given name.
      *
      * @param beanName        name of the Spring Bean to schedule
-     * @param forceScheduling if true, the scheduler will be triggered independently of the {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus}
+     * @param forceScheduling if true, the scheduler will be triggered independently of the {@link org.tuxdevelop.spring.batch.lightmin.domain.SchedulerStatus}
      */
     void schedule(String beanName, Boolean forceScheduling);
 

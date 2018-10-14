@@ -17,11 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.ITConfigurationApplication;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.client.classic.configuration.LightminClientClassicConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientRegistratorService;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
-import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
+import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
@@ -53,11 +53,11 @@ public abstract class AbstractServiceDocumentation {
     @Autowired
     protected LightminClientProperties lightminClientProperties;
     @Autowired
-    protected LightminProperties lightminProperties;
+    protected LightminClientClassicConfigurationProperties lightminProperties;
     @Autowired
     protected LightminServerProperties lightminServerProperties;
     @Autowired
-    protected LightminClientRegistrator lightminClientRegistrator;
+    protected LightminClientRegistratorService lightminClientRegistrator;
     @Autowired
     protected ServiceEntry serviceEntry;
     @Autowired
@@ -86,8 +86,8 @@ public abstract class AbstractServiceDocumentation {
 
 
     protected void addJobConfigurations() {
-        final JobConfiguration jobConfiguration = createJobConfiguration();
-        final JobConfiguration listenerJobConfiguration = createListenerJobConfiguration();
+        final JobConfiguration jobConfiguration = this.createJobConfiguration();
+        final JobConfiguration listenerJobConfiguration = this.createListenerJobConfiguration();
         this.adminService.saveJobConfiguration(jobConfiguration);
         this.adminService.saveJobConfiguration(listenerJobConfiguration);
         final Collection<JobConfiguration> jobConfigurations = this.adminService.getJobConfigurationsByJobName("simpleJob");
@@ -196,11 +196,11 @@ public abstract class AbstractServiceDocumentation {
         this.lightminClientProperties.setServiceUrl("http://localhost:" + port);
         this.lightminClientProperties.setServerPort(port);
         this.lightminClientProperties.setManagementPort(port);
-        this.lightminProperties.setUrl(new String[]{"http://localhost:" + port});
+        this.lightminProperties.getServer().setUrl(new String[]{"http://localhost:" + port});
         //lightminClientRegistrator.register();
-        addJobConfigurations();
+        this.addJobConfigurations();
         this.documentationSpec = new RequestSpecBuilder().addFilter(documentationConfiguration(this.restDocumentation)).build();
-        launchSimpleJob();
+        this.launchSimpleJob();
     }
 
     public static class MyThread extends Thread {

@@ -9,7 +9,7 @@ import org.springframework.cloud.client.discovery.event.HeartbeatMonitor;
 import org.springframework.cloud.client.discovery.event.InstanceRegisteredEvent;
 import org.springframework.cloud.client.discovery.event.ParentHeartbeatEvent;
 import org.springframework.context.event.EventListener;
-import org.tuxdevelop.spring.batch.lightmin.client.discovery.metadata.MetaDataExtender;
+import org.tuxdevelop.spring.batch.lightmin.discovery.DiscoveryBase;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 import java.util.List;
@@ -87,9 +87,9 @@ public class LightminApplicationDiscoveryListener {
     private Boolean checkIsLightminInstance(final ServiceInstance serviceInstance) {
         final Boolean result;
         final Map<String, String> metaData = serviceInstance.getMetadata();
-        if (metaData.containsKey(MetaDataExtender.LIGHTMIN_CLIENT_META_DATA_KEY)) {
-            final String value = metaData.get(MetaDataExtender.LIGHTMIN_CLIENT_META_DATA_KEY);
-            if (MetaDataExtender.LIGHTMIN_CLIENT_META_DATA_VALUE.equals(value)) {
+        if (metaData.containsKey(DiscoveryBase.LIGHTMIN_CLIENT_META_DATA_KEY)) {
+            final String value = metaData.get(DiscoveryBase.LIGHTMIN_CLIENT_META_DATA_KEY);
+            if (DiscoveryBase.LIGHTMIN_CLIENT_META_DATA_VALUE.equals(value)) {
                 result = Boolean.TRUE;
             } else {
                 result = Boolean.FALSE;

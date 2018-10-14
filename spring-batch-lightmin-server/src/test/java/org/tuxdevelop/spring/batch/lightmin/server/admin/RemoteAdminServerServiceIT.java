@@ -7,9 +7,9 @@ import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.client.classic.configuration.LightminClientClassicConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientRegistratorService;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
-import org.tuxdevelop.spring.batch.lightmin.client.registration.LightminClientRegistrator;
 import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.test.configuration.ITRemoteConfiguration;
@@ -27,11 +27,11 @@ public class RemoteAdminServerServiceIT extends AdminServerServiceIT {
     @Autowired
     private LightminApplicationRepository lightminApplicationRepository;
     @Autowired
-    private LightminClientRegistrator lightminClientRegistrator;
+    private LightminClientRegistratorService lightminClientRegistratorService;
     @Autowired
     private LightminClientProperties lightminClientProperties;
     @Autowired
-    private LightminProperties lightminProperties;
+    private LightminClientClassicConfigurationProperties lightminProperties;
     @LocalServerPort
     private Integer serverPort;
 
@@ -53,7 +53,7 @@ public class RemoteAdminServerServiceIT extends AdminServerServiceIT {
         this.lightminClientProperties.setServiceUrl("http://localhost:" + this.serverPort);
         this.lightminClientProperties.setServerPort(this.serverPort);
         this.lightminClientProperties.setManagementPort(this.serverPort);
-        this.lightminProperties.setUrl(new String[]{"http://localhost:" + this.serverPort});
-        this.lightminClientRegistrator.register();
+        this.lightminProperties.getServer().setUrl(new String[]{"http://localhost:" + this.serverPort});
+        this.lightminClientRegistratorService.register();
     }
 }

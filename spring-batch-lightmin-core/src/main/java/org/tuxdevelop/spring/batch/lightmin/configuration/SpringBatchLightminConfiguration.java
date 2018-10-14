@@ -1,19 +1,26 @@
 package org.tuxdevelop.spring.batch.lightmin.configuration;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.DiscoveryRemoteJobConfigurationRepositoryLocator;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.RemoteJobConfigurationRepositoryLocator;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.UrlRemoteJobConfigurationRepositoryLocator;
+import org.tuxdevelop.spring.batch.lightmin.client.api.controller.JobConfigurationRestController;
+import org.tuxdevelop.spring.batch.lightmin.client.api.controller.JobLauncherRestController;
+import org.tuxdevelop.spring.batch.lightmin.client.api.controller.JobRestController;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
+import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
+import org.tuxdevelop.spring.batch.lightmin.service.JobExecutionQueryService;
+import org.tuxdevelop.spring.batch.lightmin.service.JobService;
+import org.tuxdevelop.spring.batch.lightmin.service.StepService;
+import org.tuxdevelop.spring.batch.lightmin.support.ControllerServiceEntryBean;
+import org.tuxdevelop.spring.batch.lightmin.support.JobLauncherBean;
+import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
 
 import javax.sql.DataSource;
 
@@ -61,7 +68,6 @@ public class SpringBatchLightminConfiguration {
         return batchConfigurer;
     }
 
-
     @Bean
     @ConditionalOnMissingBean(SpringBatchLightminConfigurator.class)
     public SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator(final BatchConfigurer batchConfigurer) {
@@ -71,28 +77,36 @@ public class SpringBatchLightminConfiguration {
         return configuration;
     }
 
-    @Configuration
-    @ConditionalOnProperty(prefix = "spring.batch.lightmin", value = "lightmin-repository-type", havingValue = "remote")
-    class RemoteJobConfigurationRepositoryConfiguration {
+    @Bean
+    public ServiceEntry serviceEntry(final AdminService adminService,
+                                     final JobService jobService,
+                                     final StepService stepService,
+                                     final JobExecutionQueryService jobExecutionQueryService,
+                                     final JobLauncherBean jobLauncherBean) {
+        return new ControllerServiceEntryBean(adminService, jobService, stepService, jobExecutionQueryService, jobLauncherBean);
+    }
 
-        private final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
+    @Bean
+    public JobConfigurationRestController jobConfigurationRestController(final ServiceEntry serviceEntry,
+                                                                         final JobRegistry jobRegistry) {
+        return new JobConfigurationRestController(serviceEntry, jobRegistry);
+    }
 
-        @Autowired
-        RemoteJobConfigurationRepositoryConfiguration(final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
-            this.springBatchLightminConfigurationProperties = springBatchLightminConfigurationProperties;
-        }
+    @Bean
+    public JobRestController jobRestController(final ServiceEntry serviceEntry) {
+        return new JobRestController(serviceEntry);
+    }
 
-        @Bean
-        @ConditionalOnProperty(prefix = "spring.batch.lightmin", value = "discover-remote-repository", havingValue = "false", matchIfMissing = true)
-        public RemoteJobConfigurationRepositoryLocator urlRemoteJobConfigurationRepositoryLocator() {
-            return new UrlRemoteJobConfigurationRepositoryLocator(this.springBatchLightminConfigurationProperties);
-        }
+    @Bean
+    public JobLauncherRestController jobLauncherRestController(final ServiceEntry serviceEntry) {
+        return new JobLauncherRestController(serviceEntry);
+    }
 
-        @Bean
-        @ConditionalOnProperty(prefix = "spring.batch.lightmin", value = "discover-remote-repository", havingValue = "true")
-        public RemoteJobConfigurationRepositoryLocator discoveryRemoteJobConfigurationRepositoryLocator(final DiscoveryClient discoveryClient) {
-            return new DiscoveryRemoteJobConfigurationRepositoryLocator(this.springBatchLightminConfigurationProperties, discoveryClient);
-        }
+    @Bean
+    public JobLauncherBean jobLauncherBean(final JobLauncher defaultAsyncJobLauncher,
+                                           final JobRegistry jobRegistry,
+                                           final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+        return new JobLauncherBean(defaultAsyncJobLauncher, jobRegistry, springBatchLightminConfigurationProperties);
     }
 
 }

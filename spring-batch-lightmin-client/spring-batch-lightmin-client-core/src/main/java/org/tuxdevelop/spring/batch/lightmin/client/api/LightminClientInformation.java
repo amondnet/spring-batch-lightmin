@@ -1,8 +1,8 @@
 package org.tuxdevelop.spring.batch.lightmin.client.api;
 
 import lombok.Data;
-import org.tuxdevelop.spring.batch.lightmin.api.feature.ApiFeature;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.*;
+import org.tuxdevelop.spring.batch.lightmin.client.api.feature.ApiFeature;
 
 import java.io.Serializable;
 import java.util.ArrayList;

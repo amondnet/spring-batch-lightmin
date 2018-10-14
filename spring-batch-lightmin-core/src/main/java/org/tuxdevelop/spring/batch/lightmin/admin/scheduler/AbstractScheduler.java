@@ -8,8 +8,8 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.InitializingBean;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.domain.SchedulerStatus;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
 /**

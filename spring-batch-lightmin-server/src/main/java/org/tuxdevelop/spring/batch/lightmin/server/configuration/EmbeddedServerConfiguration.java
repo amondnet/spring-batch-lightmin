@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminProperties;
 import org.tuxdevelop.spring.batch.lightmin.configuration.CommonSpringBatchLightminConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.server.admin.AdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.admin.EmbeddedAdminServerService;
@@ -23,7 +22,7 @@ import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
  * @since 0.3
  */
 @Configuration
-@EnableConfigurationProperties(value = {LightminClientProperties.class, LightminProperties.class})
+@EnableConfigurationProperties(value = {LightminClientProperties.class})
 @Import(value = {CommonServerConfiguration.class, CommonSpringBatchLightminConfiguration.class})
 public class EmbeddedServerConfiguration {
 

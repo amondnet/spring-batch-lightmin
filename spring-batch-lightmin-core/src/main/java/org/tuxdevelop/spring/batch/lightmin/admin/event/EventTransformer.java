@@ -2,8 +2,8 @@ package org.tuxdevelop.spring.batch.lightmin.admin.event;
 
 
 import org.springframework.batch.core.JobExecution;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.BatchToResourceMapper;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
+import org.tuxdevelop.spring.batch.lightmin.client.api.BatchToResourceMapper;
 
 public final class EventTransformer {
 

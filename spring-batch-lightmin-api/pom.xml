@@ -11,4 +11,12 @@
 
     <artifactId>spring-batch-lightmin-api</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>

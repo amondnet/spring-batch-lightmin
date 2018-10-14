@@ -9,9 +9,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLightmin;
 import org.tuxdevelop.spring.batch.lightmin.configuration.JobCreationListener;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
 
 @Configuration
 @EnableSpringBatchLightmin
+@EnableLightminMapConfigurationRepository
 @EnableConfigurationProperties(SpringBatchLightminConfigurationProperties.class)
 @PropertySource(value = "classpath:properties/remote.properties")
 @Import(value = {ITSchedulerConfiguration.class, ITJobConfiguration.class})

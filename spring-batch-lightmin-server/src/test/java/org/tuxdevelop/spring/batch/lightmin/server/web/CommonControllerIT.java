@@ -16,11 +16,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.domain.*;
+import org.tuxdevelop.spring.batch.lightmin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.ITConfigurationApplication;
 import org.tuxdevelop.spring.batch.lightmin.server.repository.LightminApplicationRepository;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
@@ -71,9 +71,9 @@ public abstract class CommonControllerIT {
     @Before
     public void init() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-        addJobConfigurations();
-        addJobListenerConfiguration();
-        launchSimpleJob();
+        this.addJobConfigurations();
+        this.addJobListenerConfiguration();
+        this.launchSimpleJob();
         if (this.lightminApplicationRepository.findAll().size() <= 0) {
             this.registrationBean.register(LightminClientApplication.createApplication(
                     Collections.singletonList(this.simpleJob.getName()),

@@ -9,8 +9,8 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.tuxdevelop.spring.batch.lightmin.admin.event.JobExecutionEvent;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.ResourceToAdminMapper;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobLaunch;
+import org.tuxdevelop.spring.batch.lightmin.client.api.ResourceToDomainMapper;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 
@@ -39,7 +39,7 @@ public class JobLauncherBean implements ApplicationEventPublisherAware {
         final Job job;
         try {
             job = this.JobRegistry.getJob(jobLaunch.getJobName());
-            final JobParameters jobParameters = ResourceToAdminMapper.map(jobLaunch.getJobParameters());
+            final JobParameters jobParameters = ResourceToDomainMapper.map(jobLaunch.getJobParameters());
             final JobExecution jobExecution = this.jobLauncher.run(job, jobParameters);
             final JobExecutionEvent jobExecutionEvent = new JobExecutionEvent(jobExecution, this.springBatchLightminConfigurationProperties.getApplicationName());
             this.applicationEventPublisher.publishEvent(jobExecutionEvent);

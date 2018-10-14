@@ -10,7 +10,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
-import org.tuxdevelop.spring.batch.lightmin.server.TestHelper;
+import org.tuxdevelop.spring.batch.lightmin.test.api.ApiTestHelper;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,22 +23,22 @@ public abstract class AdminServerServiceIT {
 
     @Test
     public void testSaveJobConfiguration() {
-        final LightminClientApplication lightminClientApplication = createLightminClientApplication();
-        final JobConfiguration jobConfiguration = createJobConfiguration();
-        getAdminServerService().saveJobConfiguration(jobConfiguration, lightminClientApplication);
-        final JobConfigurations result = getAdminServerService().getJobConfigurations(lightminClientApplication);
+        final LightminClientApplication lightminClientApplication = this.createLightminClientApplication();
+        final JobConfiguration jobConfiguration = this.createJobConfiguration();
+        this.getAdminServerService().saveJobConfiguration(jobConfiguration, lightminClientApplication);
+        final JobConfigurations result = this.getAdminServerService().getJobConfigurations(lightminClientApplication);
         assertThat(result).isNotNull();
         assertThat(result.getJobConfigurations()).isNotEmpty();
     }
 
     @Test
     public void testUpdateJobConfiguration() {
-        final LightminClientApplication lightminClientApplication = createLightminClientApplication();
-        final JobConfiguration jobConfiguration = createJobConfiguration();
-        getAdminServerService().saveJobConfiguration(jobConfiguration, lightminClientApplication);
+        final LightminClientApplication lightminClientApplication = this.createLightminClientApplication();
+        final JobConfiguration jobConfiguration = this.createJobConfiguration();
+        this.getAdminServerService().saveJobConfiguration(jobConfiguration, lightminClientApplication);
         final Collection<String> jobNames = new LinkedList<>();
         jobNames.add("simpleJob");
-        final JobConfigurations jobConfigurations = getAdminServerService().getJobConfigurations(lightminClientApplication);
+        final JobConfigurations jobConfigurations = this.getAdminServerService().getJobConfigurations(lightminClientApplication);
         assertThat(jobConfigurations).isNotNull();
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
         assertThat(fetchedJobConfigurations).isNotEmpty();
@@ -47,7 +47,7 @@ public abstract class AdminServerServiceIT {
             jobConfigurationId = fetchedJobConfiguration.getJobConfigurationId();
         }
         assertThat(jobConfigurationId).isNotNull();
-        final JobConfiguration fetchedJobConfiguration = getAdminServerService().getJobConfiguration(jobConfigurationId, lightminClientApplication);
+        final JobConfiguration fetchedJobConfiguration = this.getAdminServerService().getJobConfiguration(jobConfigurationId, lightminClientApplication);
         assertThat(fetchedJobConfiguration).isNotNull();
         final JobParameters jobParameters = new JobParameters();
         final Map<String, JobParameter> jobParametersMap = new HashMap<>();
@@ -57,37 +57,37 @@ public abstract class AdminServerServiceIT {
         jobParametersMap.put("Double", jobParameter);
         jobParameters.setParameters(jobParametersMap);
         fetchedJobConfiguration.setJobParameters(jobParameters);
-        getAdminServerService().updateJobConfiguration(fetchedJobConfiguration, lightminClientApplication);
-        final JobConfiguration updatedJobConfiguration = getAdminServerService().getJobConfiguration(jobConfigurationId, lightminClientApplication);
+        this.getAdminServerService().updateJobConfiguration(fetchedJobConfiguration, lightminClientApplication);
+        final JobConfiguration updatedJobConfiguration = this.getAdminServerService().getJobConfiguration(jobConfigurationId, lightminClientApplication);
         assertThat(updatedJobConfiguration).isEqualTo(fetchedJobConfiguration);
     }
 
     @Test
     public void testDeleteJobConfiguration() {
-        final LightminClientApplication lightminClientApplication = createLightminClientApplication();
-        final JobConfiguration jobConfiguration = createJobConfiguration();
-        getAdminServerService().saveJobConfiguration(jobConfiguration, lightminClientApplication);
+        final LightminClientApplication lightminClientApplication = this.createLightminClientApplication();
+        final JobConfiguration jobConfiguration = this.createJobConfiguration();
+        this.getAdminServerService().saveJobConfiguration(jobConfiguration, lightminClientApplication);
         final Collection<String> jobNames = new LinkedList<>();
         jobNames.add("simpleJob");
-        final JobConfigurations jobConfigurations = getAdminServerService().getJobConfigurations(lightminClientApplication);
+        final JobConfigurations jobConfigurations = this.getAdminServerService().getJobConfigurations(lightminClientApplication);
         assertThat(jobConfigurations).isNotNull();
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
         assertThat(fetchedJobConfigurations).isNotEmpty();
         final Long jobConfigurationId = fetchedJobConfigurations.iterator().next().getJobConfigurationId();
-        getAdminServerService().deleteJobConfiguration(jobConfigurationId, lightminClientApplication);
-        final JobConfigurations jobConfigurationsAfterDelete = getAdminServerService().getJobConfigurations(lightminClientApplication);
+        this.getAdminServerService().deleteJobConfiguration(jobConfigurationId, lightminClientApplication);
+        final JobConfigurations jobConfigurationsAfterDelete = this.getAdminServerService().getJobConfigurations(lightminClientApplication);
         assertThat(jobConfigurationsAfterDelete.getJobConfigurations()).hasSize(fetchedJobConfigurations.size() - 1);
     }
 
 
     @Test
     public void testGetJobConfigurationMap() {
-        final LightminClientApplication lightminClientApplication = createLightminClientApplication();
-        final JobConfiguration jobConfiguration = createJobConfiguration();
-        getAdminServerService().saveJobConfiguration(jobConfiguration, lightminClientApplication);
+        final LightminClientApplication lightminClientApplication = this.createLightminClientApplication();
+        final JobConfiguration jobConfiguration = this.createJobConfiguration();
+        this.getAdminServerService().saveJobConfiguration(jobConfiguration, lightminClientApplication);
         final Collection<String> jobNames = new LinkedList<>();
         jobNames.add("simpleJob");
-        final Map<String, JobConfigurations> result = getAdminServerService().getJobConfigurationsMap(lightminClientApplication);
+        final Map<String, JobConfigurations> result = this.getAdminServerService().getJobConfigurationsMap(lightminClientApplication);
         assertThat(result.containsKey("simpleJob"));
         final JobConfigurations jobConfigurations = result.get("simpleJob");
         final Collection<JobConfiguration> fetchedJobConfigurations = jobConfigurations.getJobConfigurations();
@@ -102,8 +102,8 @@ public abstract class AdminServerServiceIT {
     public abstract LightminClientApplication createLightminClientApplication();
 
     private JobConfiguration createJobConfiguration() {
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null, 10L, 10L, JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobSchedulerConfiguration jobSchedulerConfiguration = ApiTestHelper.createJobSchedulerConfiguration(null, 10L, 10L, JobSchedulerType.PERIOD);
+        final JobConfiguration jobConfiguration = ApiTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName("simpleJob");
         return jobConfiguration;
     }

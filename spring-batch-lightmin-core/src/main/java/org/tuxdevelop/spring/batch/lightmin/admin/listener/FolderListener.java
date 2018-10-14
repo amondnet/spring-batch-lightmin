@@ -13,7 +13,7 @@ import org.springframework.integration.file.filters.CompositeFileListFilter;
 import org.springframework.integration.file.filters.IgnoreHiddenFileListFilter;
 import org.springframework.integration.file.filters.SimplePatternFileListFilter;
 import org.springframework.integration.file.transformer.AbstractFilePayloadTransformer;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerConstructorWrapper;
+import org.tuxdevelop.spring.batch.lightmin.domain.ListenerConstructorWrapper;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 
 import java.io.File;
@@ -42,13 +42,13 @@ public class FolderListener extends AbstractListener implements Listener {
         this.jobIncrementer = listenerConstructorWrapper.getJobIncrementer();
         this.jobListenerConfiguration = this.jobConfiguration.getJobListenerConfiguration();
         this.listenerStatus = listenerConstructorWrapper.getJobConfiguration().getJobListenerConfiguration().getListenerStatus();
-        assertConstructor();
+        this.assertConstructor();
         try {
-            attachJobIncrementer();
-            initFileListFilter();
-            initTransformer();
-            initJobLaunchingMessageHandler();
-            initIntegrationFlow();
+            this.attachJobIncrementer();
+            this.initFileListFilter();
+            this.initTransformer();
+            this.initJobLaunchingMessageHandler();
+            this.initIntegrationFlow();
         } catch (final Exception e) {
             throw new SpringBatchLightminConfigurationException(e.getMessage());
         }
@@ -84,7 +84,7 @@ public class FolderListener extends AbstractListener implements Listener {
         this.transformer = new AbstractFilePayloadTransformer<JobLaunchRequest>() {
             @Override
             protected JobLaunchRequest transformFile(final File file) throws Exception {
-                attachFileSourceToJobParameters(file);
+                FolderListener.this.attachFileSourceToJobParameters(file);
                 return new JobLaunchRequest(FolderListener.this.job, FolderListener.this.jobParameters);
             }
         };

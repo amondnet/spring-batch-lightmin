@@ -10,8 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
+import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
 
 @Configuration
+@EnableLightminMapConfigurationRepository
 @Import(value = {ITPersistenceConfiguration.class})
 @PropertySource(value = "classpath:application.properties")
 public class ITInfrastructureConfiguration {

@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.client.classic.configuration.LightminClientClassicConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientServerProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
 import org.tuxdevelop.spring.batch.lightmin.util.RequestUtil;
 
@@ -31,18 +31,19 @@ public class LightminClientRegistratorService {
     private final AtomicReference<String> registeredId = new AtomicReference<>();
 
     private final LightminClientProperties lightminClientProperties;
-    private final LightminClientServerProperties lightminClientServerProperties;
+    private final LightminClientClassicConfigurationProperties lightminClientClassicConfigurationProperties;
     private final RestTemplate restTemplate;
     private final JobRegistry jobRegistry;
     private final LightminServerLocatorService lightminServerLocatorService;
 
-    public LightminClientRegistratorService(final LightminClientProperties lightminClientProperties,
-                                            final LightminClientServerProperties lightminClientServerProperties,
-                                            final RestTemplate restTemplate,
-                                            final JobRegistry jobRegistry,
-                                            final LightminServerLocatorService lightminServerLocatorService) {
+    public LightminClientRegistratorService(
+            final LightminClientProperties lightminClientProperties,
+            final LightminClientClassicConfigurationProperties lightminClientClassicConfigurationProperties,
+            final RestTemplate restTemplate,
+            final JobRegistry jobRegistry,
+            final LightminServerLocatorService lightminServerLocatorService) {
         this.lightminClientProperties = lightminClientProperties;
-        this.lightminClientServerProperties = lightminClientServerProperties;
+        this.lightminClientClassicConfigurationProperties = lightminClientClassicConfigurationProperties;
         this.restTemplate = restTemplate;
         this.jobRegistry = jobRegistry;
         this.lightminServerLocatorService = lightminServerLocatorService;
@@ -67,7 +68,7 @@ public class LightminClientRegistratorService {
                 final String applicationPath =
                         this.getLightminServerApplicationPath(
                                 lightminUrl,
-                                this.lightminClientServerProperties.getApiApplicationsPath());
+                                this.lightminClientClassicConfigurationProperties.getServer().getApiApplicationsPath());
                 final String lightminAppplicationsUrl = lightminUrl + applicationPath;
                 final ResponseEntity<LightminClientApplication> response = this.restTemplate.postForEntity(
                         lightminAppplicationsUrl,
@@ -80,7 +81,7 @@ public class LightminClientRegistratorService {
                         log.debug("Application refreshed itself as {}", response.getBody());
                     }
                     isRegistrationSuccessful = Boolean.TRUE;
-                    if (this.lightminClientServerProperties.isRegisterOnce()) {
+                    if (this.lightminClientClassicConfigurationProperties.isRegisterOnce()) {
                         break;
                     }
                 } else {
@@ -89,7 +90,8 @@ public class LightminClientRegistratorService {
                 }
             } catch (final Exception ex) {
                 log.warn("Failed to register application as {} at spring-boot-lightminClientServerProperties ({}): {}",
-                        lightminClientApplication, this.lightminClientServerProperties.getLightminUrl(), ex.getMessage());
+                        lightminClientApplication,
+                        this.lightminClientClassicConfigurationProperties.getServer().getLightminUrl(), ex.getMessage());
             }
         }
         return isRegistrationSuccessful;
@@ -98,7 +100,7 @@ public class LightminClientRegistratorService {
     @EventListener(ContextClosedEvent.class)
     public void deregister(final ContextClosedEvent event) {
         log.debug("Retrievied ContextClosedEvent for dereigistration: {}", event);
-        if (this.lightminClientServerProperties.isAutoDeregistration()) {
+        if (this.lightminClientClassicConfigurationProperties.isAutoDeregistration()) {
             final String id = this.registeredId.get();
             if (id != null) {
                 final List<String> serverUrls = this.lightminServerLocatorService.getRemoteUrls();
@@ -107,10 +109,10 @@ public class LightminClientRegistratorService {
                         final String applicationPath =
                                 this.getLightminServerApplicationPath(
                                         lightminUrl,
-                                        this.lightminClientServerProperties.getApiApplicationsPath());
+                                        this.lightminClientClassicConfigurationProperties.getServer().getApiApplicationsPath());
                         this.restTemplate.delete(lightminUrl + applicationPath + "/" + id);
                         this.registeredId.compareAndSet(id, null);
-                        if (this.lightminClientServerProperties.isRegisterOnce()) {
+                        if (this.lightminClientClassicConfigurationProperties.isRegisterOnce()) {
                             break;
                         }
                     } catch (final Exception ex) {

@@ -10,11 +10,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerStatus;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobListenerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.ListenerStatus;
 
 /**
  * @author Marcel Becker

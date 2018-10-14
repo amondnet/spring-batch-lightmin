@@ -3,7 +3,7 @@ package org.tuxdevelop.spring.batch.lightmin.client.discovery.service;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.util.StringUtils;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
+import org.tuxdevelop.spring.batch.lightmin.client.discovery.configuration.LightminClientDiscoveryProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 
@@ -16,18 +16,18 @@ import java.util.List;
  */
 public class DiscoveryLightminServerLocatorService implements LightminServerLocatorService {
 
-    private final LightminClientProperties lightminClientProperties;
+    private final LightminClientDiscoveryProperties lightminClientDiscoveryProperties;
     private final DiscoveryClient discoveryClient;
 
-    public DiscoveryLightminServerLocatorService(final LightminClientProperties lightminClientProperties,
+    public DiscoveryLightminServerLocatorService(final LightminClientDiscoveryProperties lightminClientDiscoveryProperties,
                                                  final DiscoveryClient discoveryClient) {
-        this.lightminClientProperties = lightminClientProperties;
+        this.lightminClientDiscoveryProperties = lightminClientDiscoveryProperties;
         this.discoveryClient = discoveryClient;
     }
 
     @Override
     public List<String> getRemoteUrls() {
-        final String serviceId = this.lightminClientProperties.getServerDiscoveryName();
+        final String serviceId = this.lightminClientDiscoveryProperties.getServerDiscoveryName();
         final List<String> urls;
         if (StringUtils.hasText(serviceId)) {
             urls = this.getServerUrls(serviceId);

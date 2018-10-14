@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.tuxdevelop.spring.batch.lightmin.configuration.EnableSpringBatchLightmin;
+import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
 
 import java.util.List;
 
 @Slf4j
 @Configuration
 @EnableSpringBatchLightmin
+@EnableLightminMapConfigurationRepository
 public class ITJobConfiguration {
 
     @Autowired
@@ -29,7 +31,7 @@ public class ITJobConfiguration {
     public Job simpleJob() {
         return this.jobBuilderFactory
                 .get("simpleJob")
-                .start(simpleStep())
+                .start(this.simpleStep())
                 .build();
     }
 

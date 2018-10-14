@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerConstructorWrapper;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.SchedulerConstructorWrapper;
+import org.tuxdevelop.spring.batch.lightmin.domain.SchedulerStatus;
 
 import java.util.Date;
 

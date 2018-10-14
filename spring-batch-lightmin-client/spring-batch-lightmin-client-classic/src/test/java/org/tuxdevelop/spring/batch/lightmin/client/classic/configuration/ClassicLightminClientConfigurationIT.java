@@ -10,7 +10,6 @@ import org.tuxdevelop.spring.batch.lightmin.client.classic.event.OnClientApplica
 import org.tuxdevelop.spring.batch.lightmin.client.classic.event.OnContextClosedEventListener;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientApplicationRegistrationService;
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientRegistratorService;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.client.event.JobExecutionEventPublisher;
 import org.tuxdevelop.test.configuration.ITConfigurationApplication;
 
@@ -18,9 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-        classes = {
-                ITConfigurationApplication.class,
-                LightminClientConfiguration.class},
+        classes = {ITConfigurationApplication.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ClassicLightminClientConfigurationIT {
 

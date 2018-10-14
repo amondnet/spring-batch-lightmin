@@ -11,7 +11,7 @@ import org.springframework.batch.core.explore.support.MapJobExplorerFactoryBean;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
 import org.springframework.batch.core.repository.dao.JobInstanceDao;
 import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
-import org.tuxdevelop.spring.batch.lightmin.TestHelper;
+import org.tuxdevelop.spring.batch.lightmin.test.domain.DomainTestHelper;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -89,7 +89,7 @@ public class MapLightminJobExecutionDaoTest {
 
     @Test
     public void testFindJobExecutionsAllQueryParameters() {
-        createJobExecutionsForQuery();
+        this.createJobExecutionsForQuery();
         final String jobName = "queryJob";
         final Integer size = 4;
         final Date startDate = new Date(System.currentTimeMillis() - 100000);
@@ -107,7 +107,7 @@ public class MapLightminJobExecutionDaoTest {
 
     @Test
     public void testFindJobExecutionsAllQueryParametersWithOutJobName() {
-        createJobExecutionsForQuery();
+        this.createJobExecutionsForQuery();
         final Integer size = 4;
         final Date startDate = new Date(System.currentTimeMillis() - 100000);
         final Date endDate = new Date(System.currentTimeMillis() + 100000);
@@ -125,7 +125,7 @@ public class MapLightminJobExecutionDaoTest {
 
     @Test
     public void testFindJobExecutionsExitStatus() {
-        createJobExecutionsForQuery();
+        this.createJobExecutionsForQuery();
         final String jobName = "queryJob";
         final Integer size = 4;
         final String exitStatus = ExitStatus.COMPLETED.getExitCode();
@@ -139,7 +139,7 @@ public class MapLightminJobExecutionDaoTest {
 
     @Test
     public void testFindJobExecutionsStartDate() {
-        createJobExecutionsForQuery();
+        this.createJobExecutionsForQuery();
         final String jobName = "queryJob";
         final Integer size = 4;
         final Date startDate = new Date(System.currentTimeMillis() - 100000);
@@ -153,7 +153,7 @@ public class MapLightminJobExecutionDaoTest {
 
     @Test
     public void testFindJobExecutionsEndDate() {
-        createJobExecutionsForQuery();
+        this.createJobExecutionsForQuery();
         final String jobName = "queryJob";
         final Integer size = 4;
         final Date endDate = new Date(System.currentTimeMillis() + 100000);
@@ -177,7 +177,7 @@ public class MapLightminJobExecutionDaoTest {
         this.jobExplorer = mapJobExplorerFactoryBean.getObject();
         this.mapLightminJobExecutionDao = new MapLightminJobExecutionDao(this.jobExplorer);
         this.jobInstance = this.jobInstanceDao.createJobInstance("someJob", new JobParametersBuilder().toJobParameters());
-        final List<JobExecution> jobExecutions = TestHelper.createJobExecutions(JOB_EXECUTION_COUNT);
+        final List<JobExecution> jobExecutions = DomainTestHelper.createJobExecutions(JOB_EXECUTION_COUNT);
         for (final JobExecution jobExecution : jobExecutions) {
             jobExecution.setId(null);
             jobExecution.setJobInstance(this.jobInstance);
@@ -187,7 +187,7 @@ public class MapLightminJobExecutionDaoTest {
 
     private void createJobExecutionsForQuery() {
         this.jobInstance = this.jobInstanceDao.createJobInstance("queryJob", new JobParametersBuilder().toJobParameters());
-        final List<JobExecution> jobExecutions = TestHelper.createJobExecutions(JOB_EXECUTION_COUNT);
+        final List<JobExecution> jobExecutions = DomainTestHelper.createJobExecutions(JOB_EXECUTION_COUNT);
         for (final JobExecution jobExecution : jobExecutions) {
             final Date startTime = new Date(System.currentTimeMillis() - 100);
             final Date endTime = new Date(System.currentTimeMillis() + 100);

@@ -1,12 +1,12 @@
 package org.tuxdevelop.spring.batch.lightmin.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.NoSuchJobException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.repository.JobConfigurationRepository;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class DefaultAdminService implements AdminService {
     private final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
 
     public DefaultAdminService(final JobConfigurationRepository jobConfigurationRepository,
-                               final SchedulerService schedulerService, final ListenerService listenerService, SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
+                               final SchedulerService schedulerService, final ListenerService listenerService, final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
         this.jobConfigurationRepository = jobConfigurationRepository;
         this.schedulerService = schedulerService;
         this.listenerService = listenerService;
@@ -44,17 +44,17 @@ public class DefaultAdminService implements AdminService {
             jobConfiguration.getJobListenerConfiguration().setBeanName(TEMP_BEAN_NAME + "_LISTENER_" + jobConfiguration
                     .getJobConfigurationId());
         }
-        final JobConfiguration addedJobConfiguration = jobConfigurationRepository.add(jobConfiguration,
-                springBatchLightminConfigurationProperties.getApplicationName());
+        final JobConfiguration addedJobConfiguration = this.jobConfigurationRepository.add(jobConfiguration,
+                this.springBatchLightminConfigurationProperties.getApplicationName());
         if (addedJobConfiguration.getJobSchedulerConfiguration() != null) {
             addedJobConfiguration.getJobSchedulerConfiguration().setBeanName(null);
-            final String beanName = schedulerService.registerSchedulerForJob(addedJobConfiguration);
+            final String beanName = this.schedulerService.registerSchedulerForJob(addedJobConfiguration);
             addedJobConfiguration.getJobSchedulerConfiguration().setBeanName(beanName);
             try {
-                jobConfigurationRepository.update(addedJobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
+                this.jobConfigurationRepository.update(addedJobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
                 if (SchedulerStatus.RUNNING.equals(addedJobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
-                    schedulerService.schedule(beanName, Boolean.TRUE);
+                    this.schedulerService.schedule(beanName, Boolean.TRUE);
                 } else {
                     log.info("Scheduler not started, no scheduling triggered!");
                 }
@@ -63,14 +63,14 @@ public class DefaultAdminService implements AdminService {
                 throw new SpringBatchLightminApplicationException(e, e.getMessage());
             }
         } else if (addedJobConfiguration.getJobListenerConfiguration() != null) {
-            final String beanName = listenerService.registerListenerForJob(addedJobConfiguration);
+            final String beanName = this.listenerService.registerListenerForJob(addedJobConfiguration);
             addedJobConfiguration.getJobListenerConfiguration().setBeanName(beanName);
             if (ListenerStatus.ACTIVE.equals(addedJobConfiguration.getJobListenerConfiguration().getListenerStatus())) {
-                listenerService.activateListener(beanName, Boolean.TRUE);
+                this.listenerService.activateListener(beanName, Boolean.TRUE);
             }
             try {
-                jobConfigurationRepository.update(addedJobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
+                this.jobConfigurationRepository.update(addedJobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
             } catch (final NoSuchJobConfigurationException e) {
                 log.error(e.getMessage());
                 throw new SpringBatchLightminApplicationException(e, e.getMessage());
@@ -82,25 +82,25 @@ public class DefaultAdminService implements AdminService {
     public void updateJobConfiguration(final JobConfiguration jobConfiguration) {
         jobConfiguration.validateForUpdate();
         try {
-            final JobConfiguration existingJobConfiguration = jobConfigurationRepository.getJobConfiguration(jobConfiguration.getJobConfigurationId(),
-                    springBatchLightminConfigurationProperties.getApplicationName());
+            final JobConfiguration existingJobConfiguration = this.jobConfigurationRepository.getJobConfiguration(jobConfiguration.getJobConfigurationId(),
+                    this.springBatchLightminConfigurationProperties.getApplicationName());
             if (existingJobConfiguration.getJobSchedulerConfiguration() != null) {
                 final String existingBeanName = existingJobConfiguration.getJobSchedulerConfiguration().getBeanName();
                 jobConfiguration.getJobSchedulerConfiguration().setBeanName(existingBeanName);
-                jobConfigurationRepository.update(jobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
-                schedulerService.refreshSchedulerForJob(jobConfiguration);
+                this.jobConfigurationRepository.update(jobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
+                this.schedulerService.refreshSchedulerForJob(jobConfiguration);
                 if (SchedulerStatus.RUNNING.equals(jobConfiguration.getJobSchedulerConfiguration().getSchedulerStatus())) {
-                    schedulerService.schedule(jobConfiguration.getJobSchedulerConfiguration().getBeanName(), Boolean.TRUE);
+                    this.schedulerService.schedule(jobConfiguration.getJobSchedulerConfiguration().getBeanName(), Boolean.TRUE);
                 } else {
                     log.info("Scheduler not started, no scheduling triggered!");
                 }
             } else if (existingJobConfiguration.getJobListenerConfiguration() != null) {
                 final String existingBeanName = existingJobConfiguration.getJobListenerConfiguration().getBeanName();
                 jobConfiguration.getJobListenerConfiguration().setBeanName(existingBeanName);
-                jobConfigurationRepository.update(jobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
-                listenerService.refreshListenerForJob(jobConfiguration);
+                this.jobConfigurationRepository.update(jobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
+                this.listenerService.refreshListenerForJob(jobConfiguration);
             }
         } catch (final NoSuchJobConfigurationException e) {
             log.error(e.getMessage());
@@ -112,22 +112,22 @@ public class DefaultAdminService implements AdminService {
     @Override
     public void deleteJobConfiguration(final Long jobConfigurationId) {
         try {
-            final JobConfiguration jobConfiguration = jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
-                    springBatchLightminConfigurationProperties.getApplicationName());
+            final JobConfiguration jobConfiguration = this.jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
+                    this.springBatchLightminConfigurationProperties.getApplicationName());
             final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
             final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
             if (jobSchedulerConfiguration != null) {
                 final String beanName = jobSchedulerConfiguration.getBeanName();
-                schedulerService.terminate(beanName);
-                schedulerService.unregisterSchedulerForJob(beanName);
-                jobConfigurationRepository.delete(jobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
+                this.schedulerService.terminate(beanName);
+                this.schedulerService.unregisterSchedulerForJob(beanName);
+                this.jobConfigurationRepository.delete(jobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
             }
             if (jobListenerConfiguration != null) {
                 final String beanName = jobListenerConfiguration.getBeanName();
-                listenerService.terminateListener(beanName);
-                jobConfigurationRepository.delete(jobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
+                this.listenerService.terminateListener(beanName);
+                this.jobConfigurationRepository.delete(jobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
             }
         } catch (final NoSuchJobConfigurationException e) {
             log.error(e.getMessage());
@@ -138,8 +138,8 @@ public class DefaultAdminService implements AdminService {
     @Override
     public Collection<JobConfiguration> getJobConfigurationsByJobName(final String jobName) {
         try {
-            return jobConfigurationRepository.getJobConfigurations(jobName,
-                    springBatchLightminConfigurationProperties.getApplicationName());
+            return this.jobConfigurationRepository.getJobConfigurations(jobName,
+                    this.springBatchLightminConfigurationProperties.getApplicationName());
         } catch (final NoSuchJobException | NoSuchJobConfigurationException e) {
             final String message = "No Job with name: " + jobName + " is registered";
             log.error(message);
@@ -150,9 +150,9 @@ public class DefaultAdminService implements AdminService {
     @Override
     public Map<String, Collection<JobConfiguration>> getJobConfigurationMap(final Collection<String> jobNames) {
         final Map<String, Collection<JobConfiguration>> jobConfigurationMap = new HashMap<>();
-        final Collection<JobConfiguration> jobConfigurations = jobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames,
-                springBatchLightminConfigurationProperties.getApplicationName());
-        attachSchedulerStatus(jobConfigurations);
+        final Collection<JobConfiguration> jobConfigurations = this.jobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames,
+                this.springBatchLightminConfigurationProperties.getApplicationName());
+        this.attachSchedulerStatus(jobConfigurations);
         log.info("Fetched " + jobConfigurations.size() + " JobConfigurations");
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
             final String jobName = jobConfiguration.getJobName();
@@ -167,16 +167,16 @@ public class DefaultAdminService implements AdminService {
 
     @Override
     public Collection<JobConfiguration> getJobConfigurations(final Collection<String> jobNames) {
-        return jobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames,
-                springBatchLightminConfigurationProperties.getApplicationName());
+        return this.jobConfigurationRepository.getAllJobConfigurationsByJobNames(jobNames,
+                this.springBatchLightminConfigurationProperties.getApplicationName());
     }
 
     @Override
     public JobConfiguration getJobConfigurationById(final Long jobConfigurationId) {
         try {
-            final JobConfiguration jobConfiguration = jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
-                    springBatchLightminConfigurationProperties.getApplicationName());
-            attachSchedulerStatus(jobConfiguration);
+            final JobConfiguration jobConfiguration = this.jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
+                    this.springBatchLightminConfigurationProperties.getApplicationName());
+            this.attachSchedulerStatus(jobConfiguration);
             return jobConfiguration;
         } catch (final NoSuchJobConfigurationException e) {
             throw new SpringBatchLightminApplicationException(e, e.getMessage());
@@ -186,22 +186,22 @@ public class DefaultAdminService implements AdminService {
     @Override
     public void stopJobConfiguration(final Long jobConfigurationId) {
         try {
-            final JobConfiguration jobConfiguration = jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
-                    springBatchLightminConfigurationProperties.getApplicationName());
+            final JobConfiguration jobConfiguration = this.jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
+                    this.springBatchLightminConfigurationProperties.getApplicationName());
             final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
             final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
             if (jobSchedulerConfiguration != null) {
                 final String beanName = jobSchedulerConfiguration.getBeanName();
-                schedulerService.terminate(beanName);
+                this.schedulerService.terminate(beanName);
                 jobConfiguration.getJobSchedulerConfiguration().setSchedulerStatus(SchedulerStatus.STOPPED);
-                jobConfigurationRepository.update(jobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
+                this.jobConfigurationRepository.update(jobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
             } else if (jobListenerConfiguration != null) {
                 final String beanName = jobListenerConfiguration.getBeanName();
-                listenerService.terminateListener(beanName);
+                this.listenerService.terminateListener(beanName);
                 jobConfiguration.getJobListenerConfiguration().setListenerStatus(ListenerStatus.STOPPED);
-                jobConfigurationRepository.update(jobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
+                this.jobConfigurationRepository.update(jobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
             }
         } catch (final NoSuchJobConfigurationException e) {
             throw new SpringBatchLightminApplicationException(e, e.getMessage());
@@ -211,22 +211,22 @@ public class DefaultAdminService implements AdminService {
     @Override
     public void startJobConfiguration(final Long jobConfigurationId) {
         try {
-            final JobConfiguration jobConfiguration = jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
-                    springBatchLightminConfigurationProperties.getApplicationName());
+            final JobConfiguration jobConfiguration = this.jobConfigurationRepository.getJobConfiguration(jobConfigurationId,
+                    this.springBatchLightminConfigurationProperties.getApplicationName());
             final JobSchedulerConfiguration jobSchedulerConfiguration = jobConfiguration.getJobSchedulerConfiguration();
             final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
             if (jobSchedulerConfiguration != null) {
                 final String beanName = jobSchedulerConfiguration.getBeanName();
-                schedulerService.schedule(beanName, Boolean.FALSE);
+                this.schedulerService.schedule(beanName, Boolean.FALSE);
                 jobConfiguration.getJobSchedulerConfiguration().setSchedulerStatus(SchedulerStatus.RUNNING);
-                jobConfigurationRepository.update(jobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
+                this.jobConfigurationRepository.update(jobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
             } else if (jobListenerConfiguration != null) {
                 final String beanName = jobListenerConfiguration.getBeanName();
-                listenerService.activateListener(beanName, Boolean.FALSE);
+                this.listenerService.activateListener(beanName, Boolean.FALSE);
                 jobConfiguration.getJobListenerConfiguration().setListenerStatus(ListenerStatus.ACTIVE);
-                jobConfigurationRepository.update(jobConfiguration,
-                        springBatchLightminConfigurationProperties.getApplicationName());
+                this.jobConfigurationRepository.update(jobConfiguration,
+                        this.springBatchLightminConfigurationProperties.getApplicationName());
             }
         } catch (final NoSuchJobConfigurationException e) {
             throw new SpringBatchLightminApplicationException(e, e.getMessage());
@@ -235,20 +235,20 @@ public class DefaultAdminService implements AdminService {
 
     @Override
     public void afterPropertiesSet() {
-        assert jobConfigurationRepository != null;
-        assert schedulerService != null;
+        assert this.jobConfigurationRepository != null;
+        assert this.schedulerService != null;
     }
 
     private void attachSchedulerStatus(final Collection<JobConfiguration> jobConfigurations) {
         for (final JobConfiguration jobConfiguration : jobConfigurations) {
-            attachSchedulerStatus(jobConfiguration);
+            this.attachSchedulerStatus(jobConfiguration);
         }
     }
 
     private void attachSchedulerStatus(final JobConfiguration jobConfiguration) {
         if (jobConfiguration.getJobSchedulerConfiguration() != null) {
             final String schedulerName = jobConfiguration.getJobSchedulerConfiguration().getBeanName();
-            final SchedulerStatus schedulerStatus = schedulerService.getSchedulerStatus(schedulerName);
+            final SchedulerStatus schedulerStatus = this.schedulerService.getSchedulerStatus(schedulerName);
             jobConfiguration.getJobSchedulerConfiguration().setSchedulerStatus(schedulerStatus);
         }
     }

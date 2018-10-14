@@ -36,7 +36,7 @@ public class RemoteAdminServerService implements AdminServerService {
                                      final LightminClientApplication lightminClientApplication) {
         final HttpEntity<JobConfiguration> entity = RequestUtil.createApplicationJsonEntity(jobConfiguration);
         final ResponseEntity<Void> response =
-                this.restTemplate.postForEntity(getClientUri(lightminClientApplication), entity, Void.class);
+                this.restTemplate.postForEntity(this.getClientUri(lightminClientApplication), entity, Void.class);
         if (!HttpStatus.CREATED.equals(response.getStatusCode())) {
             final String errorMessage = "ERROR - HTTP STATUS: " + response.getStatusCode();
             throw new SpringBatchLightminApplicationException(errorMessage);
@@ -47,13 +47,13 @@ public class RemoteAdminServerService implements AdminServerService {
     public void updateJobConfiguration(final JobConfiguration jobConfiguration,
                                        final LightminClientApplication lightminClientApplication) {
         final HttpEntity<JobConfiguration> entity = RequestUtil.createApplicationJsonEntity(jobConfiguration);
-        this.restTemplate.put(getClientUri(lightminClientApplication), entity);
+        this.restTemplate.put(this.getClientUri(lightminClientApplication), entity);
     }
 
     @Override
     public JobConfigurations getJobConfigurations(final LightminClientApplication lightminClientApplication) {
         final ResponseEntity<JobConfigurations> response =
-                this.restTemplate.getForEntity(getClientUri(lightminClientApplication), JobConfigurations.class);
+                this.restTemplate.getForEntity(this.getClientUri(lightminClientApplication), JobConfigurations.class);
         ResponseUtil.checkHttpOk(response);
         return response.getBody();
     }
@@ -61,7 +61,7 @@ public class RemoteAdminServerService implements AdminServerService {
     @Override
     public Map<String, JobConfigurations> getJobConfigurationsMap(final LightminClientApplication
                                                                           lightminClientApplication) {
-        final JobConfigurations jobConfigurations = getJobConfigurations(lightminClientApplication);
+        final JobConfigurations jobConfigurations = this.getJobConfigurations(lightminClientApplication);
         final Map<String, JobConfigurations> jobConfigurationMap = new HashMap<>();
         for (final JobConfiguration jobConfiguration : jobConfigurations.getJobConfigurations()) {
             if (!jobConfigurationMap.containsKey(jobConfiguration.getJobName())) {
@@ -75,14 +75,14 @@ public class RemoteAdminServerService implements AdminServerService {
     @Override
     public void deleteJobConfiguration(final Long jobConfigurationId,
                                        final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication) + "/jobconfiguration/{jobconfigurationid}";
+        final String uri = this.getClientUri(lightminClientApplication) + "/jobconfiguration/{jobconfigurationid}";
         this.restTemplate.delete(uri, jobConfigurationId);
     }
 
     @Override
     public JobConfiguration getJobConfiguration(final Long jobConfigurationId,
                                                 final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication);
+        final String uri = this.getClientUri(lightminClientApplication);
         final ResponseEntity<JobConfiguration> response =
                 this.restTemplate.getForEntity(
                         uri + "/jobconfiguration/" + jobConfigurationId,
@@ -94,7 +94,7 @@ public class RemoteAdminServerService implements AdminServerService {
     @Override
     public void startJobConfigurationScheduler(final Long jobConfigurationId,
                                                final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication);
+        final String uri = this.getClientUri(lightminClientApplication);
         final ResponseEntity<Void> response =
                 this.restTemplate.getForEntity(uri + "/" + jobConfigurationId + "/start", Void.class);
         ResponseUtil.checkHttpOk(response);
@@ -103,7 +103,7 @@ public class RemoteAdminServerService implements AdminServerService {
     @Override
     public void stopJobConfigurationScheduler(final Long jobConfigurationId,
                                               final LightminClientApplication lightminClientApplication) {
-        final String uri = getClientUri(lightminClientApplication);
+        final String uri = this.getClientUri(lightminClientApplication);
         final ResponseEntity<Void> response =
                 this.restTemplate.getForEntity(uri + "/" + jobConfigurationId + "/stop", Void.class);
         ResponseUtil.checkHttpOk(response);

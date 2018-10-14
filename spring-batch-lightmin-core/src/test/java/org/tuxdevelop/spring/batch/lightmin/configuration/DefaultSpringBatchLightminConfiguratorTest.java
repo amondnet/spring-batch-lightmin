@@ -38,8 +38,8 @@ public class DefaultSpringBatchLightminConfiguratorTest {
         assertThat(configurator).isNotNull();
         configurator.setBatchConfigurer(batchConfigurer);
         configurator.initialize();
-        assertJdbcComponents(configurator);
-        assertCommonComponents(configurator);
+        this.assertJdbcComponents(configurator);
+        this.assertCommonComponents(configurator);
         ((ConfigurableApplicationContext) this.applicationContext).close();
     }
 
@@ -47,15 +47,14 @@ public class DefaultSpringBatchLightminConfiguratorTest {
     public void initializeMapTest() {
         this.applicationContext = new AnnotationConfigApplicationContext(ITConfiguration.class);
         this.springBatchLightminConfigurationProperties.setBatchRepositoryType(BatchRepositoryType.MAP);
-        this.springBatchLightminConfigurationProperties.setLightminRepositoryType(LightminRepositoryType.MAP);
         final DefaultSpringBatchLightminConfigurator configurator = new DefaultSpringBatchLightminConfigurator(this.springBatchLightminConfigurationProperties, this.applicationContext);
         final DefaultSpringBatchLightminBatchConfigurer batchConfigurer = new DefaultSpringBatchLightminBatchConfigurer();
         batchConfigurer.initialize();
         assertThat(configurator).isNotNull();
         configurator.setBatchConfigurer(batchConfigurer);
         configurator.initialize();
-        assertMapComponents(configurator);
-        assertCommonComponents(configurator);
+        this.assertMapComponents(configurator);
+        this.assertCommonComponents(configurator);
         ((ConfigurableApplicationContext) this.applicationContext).close();
     }
 

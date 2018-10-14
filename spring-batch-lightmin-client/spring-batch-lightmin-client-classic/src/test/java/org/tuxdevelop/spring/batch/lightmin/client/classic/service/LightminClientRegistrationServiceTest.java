@@ -13,8 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
+import org.tuxdevelop.spring.batch.lightmin.client.classic.configuration.LightminClientClassicConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientServerProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
 
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class LightminClientRegistrationServiceTest {
     @Mock
     private LightminClientProperties lightminClientProperties;
     @Mock
-    private LightminClientServerProperties lightminClientServerProperties;
+    private LightminClientClassicConfigurationProperties lightminClientClassicConfigurationProperties;
     @Mock
     private RestTemplate restTemplate;
     @Mock
@@ -84,10 +84,12 @@ public class LightminClientRegistrationServiceTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        when(this.lightminClientClassicConfigurationProperties.getServer())
+                .thenReturn(new LightminClientClassicConfigurationProperties.LightminClientServerProperties());
         this.lightminClientRegistratorService =
                 new LightminClientRegistratorService(
                         this.lightminClientProperties,
-                        this.lightminClientServerProperties,
+                        this.lightminClientClassicConfigurationProperties,
                         this.restTemplate,
                         this.jobRegistry,
                         this.lightminServerLocatorService);

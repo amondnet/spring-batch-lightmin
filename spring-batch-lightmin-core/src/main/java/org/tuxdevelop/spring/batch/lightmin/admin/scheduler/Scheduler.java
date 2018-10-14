@@ -1,6 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.admin.scheduler;
 
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus;
+import org.tuxdevelop.spring.batch.lightmin.domain.SchedulerStatus;
 
 /**
  * @author Marcel Becker
@@ -20,9 +20,9 @@ public interface Scheduler {
     void terminate();
 
     /**
-     * retrieves the current {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus}
+     * retrieves the current {@link org.tuxdevelop.spring.batch.lightmin.domain.SchedulerStatus}
      *
-     * @return {@link org.tuxdevelop.spring.batch.lightmin.admin.domain.SchedulerStatus}
+     * @return {@link org.tuxdevelop.spring.batch.lightmin.domain.SchedulerStatus}
      */
     SchedulerStatus getSchedulerStatus();
 }

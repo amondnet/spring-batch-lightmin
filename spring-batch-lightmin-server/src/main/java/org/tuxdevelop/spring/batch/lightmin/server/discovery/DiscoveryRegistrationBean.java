@@ -22,7 +22,7 @@ public class DiscoveryRegistrationBean {
     }
 
     public void register(final ServiceInstance serviceInstance) {
-        final LightminClientApplication lightminClientApplication = getLightminClientApplication(serviceInstance);
+        final LightminClientApplication lightminClientApplication = this.getLightminClientApplication(serviceInstance);
         this.registrationBean.register(lightminClientApplication);
     }
 

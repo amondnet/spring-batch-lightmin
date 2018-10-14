@@ -10,9 +10,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.listener.FolderListener;
 import org.tuxdevelop.spring.batch.lightmin.admin.listener.Listener;
+import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
@@ -52,7 +52,7 @@ public class DefaultListenerService implements ListenerService, InitializingBean
         final String beanName;
         switch (jobListenerType) {
             case LOCAL_FOLDER_LISTENER:
-                beanName = registerFolderListener(jobConfiguration);
+                beanName = this.registerFolderListener(jobConfiguration);
                 break;
             default:
                 throw new SpringBatchLightminApplicationException("Unknown ListenerType: " + jobListenerType);
@@ -67,8 +67,8 @@ public class DefaultListenerService implements ListenerService, InitializingBean
 
     @Override
     public void refreshListenerForJob(final JobConfiguration jobConfiguration) {
-        unregisterListenerForJob(jobConfiguration.getJobListenerConfiguration().getBeanName());
-        final String beanName = registerListenerForJob(jobConfiguration);
+        this.unregisterListenerForJob(jobConfiguration.getJobListenerConfiguration().getBeanName());
+        final String beanName = this.registerListenerForJob(jobConfiguration);
         final Listener listener = this.applicationContext.getBean(beanName, Listener.class);
         if (ListenerStatus.ACTIVE.equals(listener.getListenerStatus())) {
             listener.start();
@@ -99,7 +99,7 @@ public class DefaultListenerService implements ListenerService, InitializingBean
     }
 
     @Override
-    public JobLauncher createLobLauncher(TaskExecutorType taskExecutorType, JobRepository jobRepository) {
+    public JobLauncher createLobLauncher(final TaskExecutorType taskExecutorType, final JobRepository jobRepository) {
         return ServiceUtil.createJobLauncher(taskExecutorType, this.jobRepository);
     }
 
@@ -114,7 +114,7 @@ public class DefaultListenerService implements ListenerService, InitializingBean
         try {
             final ListenerConstructorWrapper listenerConstructorWrapper = new ListenerConstructorWrapper();
             final JobListenerConfiguration jobListenerConfiguration = jobConfiguration.getJobListenerConfiguration();
-            final JobLauncher jobLauncher = this.createLobLauncher(jobListenerConfiguration.getTaskExecutorType(),jobRepository);
+            final JobLauncher jobLauncher = this.createLobLauncher(jobListenerConfiguration.getTaskExecutorType(), this.jobRepository);
             final JobParameters jobParameters = ServiceUtil.mapToJobParameters(jobConfiguration.getJobParameters());
             final Job job = this.jobRegistry.getJob(jobConfiguration.getJobName());
             listenerConstructorWrapper.setJob(job);
@@ -123,7 +123,7 @@ public class DefaultListenerService implements ListenerService, InitializingBean
             listenerConstructorWrapper.setJobConfiguration(jobConfiguration);
             listenerConstructorWrapper.setJobIncrementer(jobConfiguration.getJobIncrementer());
             if (!StringUtils.hasText(jobListenerConfiguration.getBeanName())) {
-                beanName = generateSchedulerBeanName(jobConfiguration.getJobName(),
+                beanName = this.generateSchedulerBeanName(jobConfiguration.getJobName(),
                         jobConfiguration.getJobConfigurationId(), jobListenerConfiguration.getJobListenerType());
             } else {
                 beanName = jobListenerConfiguration.getBeanName();

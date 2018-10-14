@@ -7,10 +7,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.client.RestTemplate;
+import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
 
 import javax.sql.DataSource;
 
 @SpringBootApplication
+@EnableLightminMapConfigurationRepository
 public class ITConfigurationApplication {
 
     public static void main(final String[] args) {

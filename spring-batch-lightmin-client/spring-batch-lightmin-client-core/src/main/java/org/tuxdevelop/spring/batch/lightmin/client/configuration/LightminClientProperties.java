@@ -1,5 +1,6 @@
 package org.tuxdevelop.spring.batch.lightmin.client.configuration;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +35,6 @@ public class LightminClientProperties {
     private Integer managementPort;
     @Getter
     @Setter
-    private Boolean discoveryEnabled = Boolean.FALSE;
-    @Getter
-    @Setter
-    private Boolean discoverServer = Boolean.FALSE;
-    @Getter
-    @Setter
-    private String serverDiscoveryName = "lightmin-server";
-    @Getter
-    @Setter
     private Boolean publishJobEvents = Boolean.TRUE;
     @Getter
     @Setter
@@ -55,6 +47,9 @@ public class LightminClientProperties {
     private final String name;
     @Getter
     private final String healthEndpointId;
+    @Getter
+    @Setter
+    private ClientServerProperties server = new ClientServerProperties();
 
     private final ManagementServerProperties managementServerProperties;
     private final ServerProperties serverProperties;
@@ -77,8 +72,8 @@ public class LightminClientProperties {
         }
 
         if ((this.managementPort == null || this.managementPort.equals(this.serverPort))
-                && getServiceUrl() != null) {
-            return append(getServiceUrl(), this.managementServerProperties.getContextPath());
+                && this.getServiceUrl() != null) {
+            return this.append(this.getServiceUrl(), this.managementServerProperties.getContextPath());
         }
 
         if (this.managementPort == null) {
@@ -90,15 +85,15 @@ public class LightminClientProperties {
             final InetAddress address = this.serverProperties.getAddress();
             final String hostAddress;
             if (address == null) {
-                hostAddress = determineHost();
+                hostAddress = this.determineHost();
             } else {
                 hostAddress = address.getHostAddress();
             }
-            return append(append(createLocalUri(hostAddress, this.managementPort),
+            return this.append(this.append(this.createLocalUri(hostAddress, this.managementPort),
                     this.serverProperties.getContextPath()), this.managementServerProperties.getContextPath());
 
         }
-        return append(createLocalUri(determineHost(), this.managementPort),
+        return this.append(this.createLocalUri(this.determineHost(), this.managementPort),
                 this.managementServerProperties.getContextPath());
     }
 
@@ -106,8 +101,8 @@ public class LightminClientProperties {
         if (this.healthUrl != null) {
             return this.healthUrl;
         }
-        final String managementUrl = getManagementUrl();
-        return append(managementUrl, this.healthEndpointId);
+        final String managementUrl = this.getManagementUrl();
+        return this.append(managementUrl, this.healthEndpointId);
     }
 
     //TODO: refactor to only one return statement
@@ -125,15 +120,15 @@ public class LightminClientProperties {
             final InetAddress address = this.serverProperties.getAddress();
             final String hostAddress;
             if (address == null) {
-                hostAddress = determineHost();
+                hostAddress = this.determineHost();
             } else {
                 hostAddress = address.getHostAddress();
             }
-            return append(append(createLocalUri(hostAddress, this.serverPort),
+            return this.append(this.append(this.createLocalUri(hostAddress, this.serverPort),
                     this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
 
         }
-        return append(append(createLocalUri(determineHost(), this.serverPort),
+        return this.append(this.append(this.createLocalUri(this.determineHost(), this.serverPort),
                 this.serverProperties.getServletPath()), this.serverProperties.getContextPath());
     }
 
@@ -166,10 +161,16 @@ public class LightminClientProperties {
         if (StringUtils.hasText(this.hostname)) {
             host = this.hostname;
         } else {
-            final InetAddress inetAddress = getHostAddress();
+            final InetAddress inetAddress = this.getHostAddress();
             host = inetAddress.getCanonicalHostName();
         }
         return host;
+    }
+
+    @Data
+    public static class ClientServerProperties {
+        private String username;
+        private String password;
     }
 
 }

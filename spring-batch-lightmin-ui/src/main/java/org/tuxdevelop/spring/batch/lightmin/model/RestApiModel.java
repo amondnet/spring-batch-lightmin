@@ -2,7 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.model;
 
 import lombok.Getter;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.tuxdevelop.spring.batch.lightmin.api.controller.AbstractRestController;
+import org.tuxdevelop.spring.batch.lightmin.client.api.controller.AbstractRestController;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,10 +19,10 @@ public class RestApiModel {
     private static final String JOB_CONFIGURATION_URIS = "JobConfigurations URIs";
 
     @Getter
-    private Map<String, List<MethodUriModel>> apiMap;
+    private final Map<String, List<MethodUriModel>> apiMap;
 
     public RestApiModel() {
-        apiMap = new HashMap<>();
+        this.apiMap = new HashMap<>();
         final List<MethodUriModel> jobUris = new LinkedList<>();
         jobUris.add(new MethodUriModel(RequestMethod.GET.name(), AbstractRestController.JobRestControllerAPI
                 .JOB_EXECUTIONS_JOB_EXECUTION_ID, UriDescription.JOB_EXECUTIONS_JOB_EXECUTION_ID_GET_DESC));
@@ -45,17 +45,17 @@ public class RestApiModel {
         jobConfigurationUris.add(new MethodUriModel(RequestMethod.DELETE.name(), AbstractRestController
                 .JobConfigurationRestControllerAPI.JOB_CONFIGURATION_JOB_CONFIGURATION_ID, UriDescription.JOB_CONFIGURATION_JOB_CONFIGURATION_ID_DELETE_DESC));
 
-        apiMap.put(JOB_URIS, jobUris);
-        apiMap.put(JOB_CONFIGURATION_URIS, jobConfigurationUris);
+        this.apiMap.put(JOB_URIS, jobUris);
+        this.apiMap.put(JOB_CONFIGURATION_URIS, jobConfigurationUris);
     }
 
     public class MethodUriModel {
         @Getter
-        private String method;
+        private final String method;
         @Getter
-        private String uri;
+        private final String uri;
         @Getter
-        private String description;
+        private final String description;
 
         public MethodUriModel(final String method, final String uri, final String description) {
             this.method = method;

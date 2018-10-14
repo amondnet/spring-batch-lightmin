@@ -4,8 +4,8 @@ package org.tuxdevelop.spring.batch.lightmin.test.util;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.JdbcJobConfigurationRepository;
-import org.tuxdevelop.spring.batch.lightmin.configuration.SpringBatchLightminConfigurationProperties;
+import org.tuxdevelop.spring.batch.lightmin.repository.JdbcJobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.repository.configuration.JdbcJobConfigurationRepositoryConfigurationProperties;
 
 public class ITJdbcJobConfigurationRepository extends JdbcJobConfigurationRepository implements ITJobConfigurationRepository {
 
@@ -19,28 +19,28 @@ public class ITJdbcJobConfigurationRepository extends JdbcJobConfigurationReposi
 
     private final JdbcTemplate jdbcTemplate;
     private final TransactionTemplate transactionTemplate;
-    private final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties;
+    private final JdbcJobConfigurationRepositoryConfigurationProperties properties;
 
     public ITJdbcJobConfigurationRepository(final JdbcTemplate jdbcTemplate, final String tablePrefix,
                                             final PlatformTransactionManager platformTransactionManager,
-                                            final SpringBatchLightminConfigurationProperties springBatchLightminConfigurationProperties) {
-        super(jdbcTemplate, springBatchLightminConfigurationProperties);
+                                            final JdbcJobConfigurationRepositoryConfigurationProperties properties) {
+        super(jdbcTemplate, properties);
         this.jdbcTemplate = jdbcTemplate;
 
         this.transactionTemplate = new TransactionTemplate(platformTransactionManager);
-        this.springBatchLightminConfigurationProperties = springBatchLightminConfigurationProperties;
+        this.properties = properties;
         this.transactionTemplate.setReadOnly(Boolean.FALSE);
     }
 
     @Override
     public void clean(final String applicationName) {
         this.transactionTemplate.execute(status -> {
-            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_PARAMETERS,
-                    this.springBatchLightminConfigurationProperties.getJobConfigurationParameterTableName()));
-            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_VALUES,
-                    this.springBatchLightminConfigurationProperties.getJobConfigurationValueTableName()));
-            this.jdbcTemplate.update(attachTablePrefix(DELETE_FROM_JOB_CONFIGURATION,
-                    this.springBatchLightminConfigurationProperties.getJobConfigurationTableName()));
+            this.jdbcTemplate.update(this.attachTablePrefix(DELETE_FROM_JOB_PARAMETERS,
+                    this.properties.getJobConfigurationParameterTableName()));
+            this.jdbcTemplate.update(this.attachTablePrefix(DELETE_FROM_JOB_VALUES,
+                    this.properties.getJobConfigurationValueTableName()));
+            this.jdbcTemplate.update(this.attachTablePrefix(DELETE_FROM_JOB_CONFIGURATION,
+                    this.properties.getJobConfigurationTableName()));
             return 1;
         });
     }

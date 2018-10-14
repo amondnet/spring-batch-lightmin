@@ -42,6 +42,10 @@
         <module>spring-batch-lightmin-api</module>
         <module>spring-batch-lightmin-server</module>
         <module>spring-batch-lightmin-repository-server</module>
+        <module>spring-batch-lightmin-repository</module>
+        <module>spring-batch-lightmin-domain</module>
+        <module>spring-batch-lightmin-test</module>
+        <module>spring-batch-lightmin-util</module>
     </modules>
 
     <properties>

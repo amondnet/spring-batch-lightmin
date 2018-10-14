@@ -13,12 +13,12 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.JobLaunch;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.util.ApiParameterParser;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.model.JobLauncherModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobNameModel;
 import org.tuxdevelop.spring.batch.lightmin.server.job.JobServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
-import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,7 +57,7 @@ public class JobLauncherController extends CommonController {
         final JobLauncherModel jobLauncherModel = new JobLauncherModel();
         final JobParameters oldJobParameters = this.jobServerService.getLastJobParameters(jobName, lightminClientApplication);
         jobLauncherModel.setJobName(jobName);
-        jobLauncherModel.setJobParameters(ParameterParser.parseParametersToString(oldJobParameters));
+        jobLauncherModel.setJobParameters(ApiParameterParser.parseParametersToString(oldJobParameters));
         model.addAttribute("jobLauncherModel", jobLauncherModel);
         model.addAttribute("jobIncrementers",
                 lightminClientApplication.getLightminClientInformation().getSupportedJobIncrementers());
@@ -70,8 +70,7 @@ public class JobLauncherController extends CommonController {
                                   final HttpServletRequest request) {
         final LightminClientApplication lightminClientApplication = this.registrationBean.get(applicationId);
         final String jobName = jobLauncherModel.getJobName();
-        final JobParameters jobParameters = ParameterParser
-                .parseParametersStringToJobParameters(jobLauncherModel.getJobParameters());
+        final JobParameters jobParameters = ApiParameterParser.parseParametersToJobParameters(jobLauncherModel.getJobParameters());
         final JobLaunch jobLaunch = new JobLaunch();
         this.attacheIncremeter(jobLauncherModel, jobParameters);
         jobLaunch.setJobName(jobName);

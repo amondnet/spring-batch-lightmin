@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.*;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
+import org.tuxdevelop.spring.batch.lightmin.api.resource.util.ApiParameterParser;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientApplication;
 import org.tuxdevelop.spring.batch.lightmin.client.api.LightminClientInformation;
 import org.tuxdevelop.spring.batch.lightmin.model.JobConfigurationAddModel;
@@ -18,7 +19,6 @@ import org.tuxdevelop.spring.batch.lightmin.model.JobListenerTypeModel;
 import org.tuxdevelop.spring.batch.lightmin.model.JobSchedulerTypeModel;
 import org.tuxdevelop.spring.batch.lightmin.server.admin.AdminServerService;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
-import org.tuxdevelop.spring.batch.lightmin.util.ParameterParser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -124,7 +124,7 @@ public class JobConfigurationController extends CommonController {
                 lightminClientApplication);
         final JobConfigurationAddModel jobConfigurationAddModel = new JobConfigurationAddModel();
         jobConfigurationAddModel.setJobName(jobConfiguration.getJobName());
-        jobConfigurationAddModel.setJobParameters(ParameterParser.parseParametersToString(jobConfiguration.getJobParameters()));
+        jobConfigurationAddModel.setJobParameters(ApiParameterParser.parseParametersToString(jobConfiguration.getJobParameters()));
         jobConfigurationAddModel.setJobSchedulerType(jobConfiguration.getJobSchedulerConfiguration().getJobSchedulerType());
         jobConfigurationAddModel.setTaskExecutorType(jobConfiguration.getJobSchedulerConfiguration().getTaskExecutorType());
         jobConfigurationAddModel.setCronExpression(jobConfiguration.getJobSchedulerConfiguration().getCronExpression());
@@ -152,7 +152,7 @@ public class JobConfigurationController extends CommonController {
                 this.adminServerService.getJobConfiguration(jobConfigurationId, lightminClientApplication);
         final JobConfigurationAddModel jobConfigurationAddModel = new JobConfigurationAddModel();
         jobConfigurationAddModel.setJobName(jobConfiguration.getJobName());
-        jobConfigurationAddModel.setJobParameters(ParameterParser.parseParametersToString(jobConfiguration.getJobParameters()));
+        jobConfigurationAddModel.setJobParameters(ApiParameterParser.parseParametersToString(jobConfiguration.getJobParameters()));
         jobConfigurationAddModel.setJobListenerType(jobConfiguration.getJobListenerConfiguration().getJobListenerType());
         jobConfigurationAddModel.setTaskExecutorType(jobConfiguration.getJobListenerConfiguration().getTaskExecutorType());
         jobConfigurationAddModel.setSourceFolder(jobConfiguration.getJobListenerConfiguration().getSourceFolder());
@@ -322,8 +322,7 @@ public class JobConfigurationController extends CommonController {
         }
         //JobConfiguration
         final JobConfiguration jobConfiguration = new JobConfiguration();
-        final JobParameters jobParameters = ParameterParser
-                .parseParametersStringToJobParameters(jobConfigurationAddModel.getJobParameters());
+        final JobParameters jobParameters = ApiParameterParser.parseParametersToJobParameters(jobConfigurationAddModel.getJobParameters());
         jobConfiguration.setJobName(jobConfigurationAddModel.getJobName());
         jobConfiguration.setJobSchedulerConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobListenerConfiguration(jobListenerConfiguration);

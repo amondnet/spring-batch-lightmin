@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.client.classic.configuration;
 
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -13,10 +14,14 @@ import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClien
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.UrlLightminServerLocatorService;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
-import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientServerProperties;
 import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocatorService;
 
+import static org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientConfiguration.LightminServerRestTemplateFactory.getRestTemplate;
+
 @Configuration
+@EnableConfigurationProperties(
+        value = {LightminClientClassicConfigurationProperties.class}
+)
 @Import(value = {LightminClientConfiguration.class})
 public class ClassicLightminClientConfiguration {
 
@@ -24,13 +29,16 @@ public class ClassicLightminClientConfiguration {
     @ConditionalOnMissingBean(value = {LightminClientRegistratorService.class})
     public LightminClientRegistratorService lightminClientRegistratorService(
             final LightminClientProperties lightminClientProperties,
-            final LightminClientServerProperties lightminProperties,
+            final LightminClientClassicConfigurationProperties lightminClientClassicConfigurationProperties,
             final JobRegistry jobRegistry,
             final LightminServerLocatorService lightminServerLocatorService) {
-        final RestTemplate restTemplate =
-                LightminClientConfiguration.LightminServerRestTemplateFactory.getRestTemplate(lightminProperties);
+        final RestTemplate restTemplate = getRestTemplate(lightminClientProperties.getServer());
         return new LightminClientRegistratorService(
-                lightminClientProperties, lightminProperties, restTemplate, jobRegistry, lightminServerLocatorService);
+                lightminClientProperties,
+                lightminClientClassicConfigurationProperties,
+                restTemplate,
+                jobRegistry,
+                lightminServerLocatorService);
     }
 
     /**
@@ -40,12 +48,15 @@ public class ClassicLightminClientConfiguration {
     @ConditionalOnMissingBean(value = {LightminClientApplicationRegistrationService.class})
     public LightminClientApplicationRegistrationService lightminClientApplicationRegistrationService(
             final LightminClientRegistratorService lightminClientRegistrator,
-            final LightminClientServerProperties lightminClientServerProperties) {
+            final LightminClientClassicConfigurationProperties lightminClientClassicConfigurationProperties) {
         final LightminClientApplicationRegistrationService registrationLightminClientApplicationBean =
                 new LightminClientApplicationRegistrationService(lightminClientRegistrator);
-        registrationLightminClientApplicationBean.setAutoRegister(lightminClientServerProperties.isAutoRegistration());
-        registrationLightminClientApplicationBean.setAutoDeregister(lightminClientServerProperties.isAutoDeregistration());
-        registrationLightminClientApplicationBean.setRegisterPeriod(lightminClientServerProperties.getPeriod());
+        registrationLightminClientApplicationBean.setAutoRegister(
+                lightminClientClassicConfigurationProperties.isAutoRegistration());
+        registrationLightminClientApplicationBean.setAutoDeregister(
+                lightminClientClassicConfigurationProperties.isAutoDeregistration());
+        registrationLightminClientApplicationBean.setRegisterPeriod(
+                lightminClientClassicConfigurationProperties.getPeriod());
         return registrationLightminClientApplicationBean;
     }
 
@@ -53,8 +64,8 @@ public class ClassicLightminClientConfiguration {
     @Bean
     @ConditionalOnMissingBean(value = {LightminServerLocatorService.class})
     public LightminServerLocatorService urlLightminServerLocator(
-            final LightminClientServerProperties lightminClientServerProperties) {
-        return new UrlLightminServerLocatorService(lightminClientServerProperties);
+            final LightminClientClassicConfigurationProperties lightminClientClassicConfigurationProperties) {
+        return new UrlLightminServerLocatorService(lightminClientClassicConfigurationProperties);
     }
 
     @Bean
@@ -70,5 +81,4 @@ public class ClassicLightminClientConfiguration {
             final LightminClientApplicationRegistrationService lightminClientApplicationRegistrationService) {
         return new OnContextClosedEventListener(lightminClientApplicationRegistrationService);
     }
-
 }

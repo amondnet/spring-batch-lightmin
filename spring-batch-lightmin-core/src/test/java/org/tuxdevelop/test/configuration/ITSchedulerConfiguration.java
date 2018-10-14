@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.tuxdevelop.spring.batch.lightmin.TestHelper;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
+import org.tuxdevelop.spring.batch.lightmin.domain.*;
+import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.test.domain.DomainTestHelper;
 
 @Configuration
+@EnableLightminMapConfigurationRepository
 public class ITSchedulerConfiguration {
 
     @Autowired
@@ -22,9 +24,9 @@ public class ITSchedulerConfiguration {
 
     @Bean
     public PeriodScheduler periodScheduler(final ThreadPoolTaskScheduler threadPoolTaskScheduler) {
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null,
+        final JobSchedulerConfiguration jobSchedulerConfiguration = DomainTestHelper.createJobSchedulerConfiguration(null,
                 10L, 10L, JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         final SchedulerConstructorWrapper schedulerConstructorWrapper = new SchedulerConstructorWrapper();
         schedulerConstructorWrapper.setJob(this.simpleJob);
         schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);
@@ -38,9 +40,9 @@ public class ITSchedulerConfiguration {
 
     @Bean
     public CronScheduler cronScheduler(final ThreadPoolTaskScheduler threadPoolTaskScheduler) {
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(
+        final JobSchedulerConfiguration jobSchedulerConfiguration = DomainTestHelper.createJobSchedulerConfiguration(
                 "0 0/5 * * * ?", null, null, JobSchedulerType.CRON);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         final SchedulerConstructorWrapper schedulerConstructorWrapper = new SchedulerConstructorWrapper();
         schedulerConstructorWrapper.setJob(this.simpleJob);
         schedulerConstructorWrapper.setJobConfiguration(jobConfiguration);

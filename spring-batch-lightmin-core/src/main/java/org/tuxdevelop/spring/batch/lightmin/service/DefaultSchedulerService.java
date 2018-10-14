@@ -9,10 +9,10 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.CronScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.PeriodScheduler;
 import org.tuxdevelop.spring.batch.lightmin.admin.scheduler.Scheduler;
+import org.tuxdevelop.spring.batch.lightmin.domain.*;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminConfigurationException;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 

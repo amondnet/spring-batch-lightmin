@@ -20,8 +20,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.tuxdevelop.spring.batch.lightmin.admin.event.listener.JobExecutionFinishedJobExecutionListener;
-import org.tuxdevelop.spring.batch.lightmin.admin.repository.JobConfigurationRepository;
 import org.tuxdevelop.spring.batch.lightmin.dao.LightminJobExecutionDao;
+import org.tuxdevelop.spring.batch.lightmin.repository.JobConfigurationRepository;
+import org.tuxdevelop.spring.batch.lightmin.repository.configuration.LightminJobConfigurationRepositoryConfigurer;
 import org.tuxdevelop.spring.batch.lightmin.service.*;
 import org.tuxdevelop.spring.batch.lightmin.support.JobExecutionListenerRegisterBean;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
@@ -32,7 +33,7 @@ import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
  */
 @Configuration
 @EnableConfigurationProperties(value = {SpringBatchLightminConfigurationProperties.class})
-@Import(value = {SpringBatchLightminConfiguration.class, RestServiceConfiguration.class})
+@Import(value = {SpringBatchLightminConfiguration.class})
 public class CommonSpringBatchLightminConfiguration {
 
     @Bean
@@ -132,12 +133,6 @@ public class CommonSpringBatchLightminConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(JobConfigurationRepository.class)
-    public JobConfigurationRepository jobConfigurationRepository(final SpringBatchLightminConfigurator defaultSpringBatchLightminConfigurator) {
-        return defaultSpringBatchLightminConfigurator.getJobConfigurationRepository();
-    }
-
-    @Bean
     public JobLauncher defaultAsyncJobLauncher(final JobRepository jobRepository) {
         final SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
         jobLauncher.setJobRepository(jobRepository);
@@ -156,6 +151,12 @@ public class CommonSpringBatchLightminConfiguration {
     public JobExecutionListenerRegisterBean jobExecutionListenerRegisterBean(
             @Qualifier("jobExecutionFinishedJobExecutionListener") final JobExecutionListener jobExecutionFinishedJobExecutionListener) {
         return new JobExecutionListenerRegisterBean(jobExecutionFinishedJobExecutionListener);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(value = {LightminJobConfigurationRepositoryConfigurer.class})
+    public LightminJobConfigurationRepositoryConfigurer lightminJobConfigurationRepositoryConfigurer() {
+        return new LightminJobConfigurationRepositoryConfigurer();
     }
 
 }

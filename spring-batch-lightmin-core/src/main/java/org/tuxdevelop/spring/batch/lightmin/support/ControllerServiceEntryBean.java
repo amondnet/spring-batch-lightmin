@@ -1,13 +1,13 @@
 package org.tuxdevelop.spring.batch.lightmin.support;
 
 import org.springframework.batch.core.JobInstance;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.AdminToResourceMapper;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.BatchToResourceMapper;
-import org.tuxdevelop.spring.batch.lightmin.api.resource.ResourceToAdminMapper;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.batch.*;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
+import org.tuxdevelop.spring.batch.lightmin.client.api.BatchToResourceMapper;
+import org.tuxdevelop.spring.batch.lightmin.client.api.DomainToResourceMapper;
+import org.tuxdevelop.spring.batch.lightmin.client.api.ResourceToDomainMapper;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
 import org.tuxdevelop.spring.batch.lightmin.service.JobExecutionQueryService;
 import org.tuxdevelop.spring.batch.lightmin.service.JobService;
@@ -47,12 +47,12 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public void saveJobConfiguration(final JobConfiguration jobConfiguration) {
-        this.adminService.saveJobConfiguration(ResourceToAdminMapper.map(jobConfiguration));
+        this.adminService.saveJobConfiguration(ResourceToDomainMapper.map(jobConfiguration));
     }
 
     @Override
     public void updateJobConfiguration(final JobConfiguration jobConfiguration) {
-        this.adminService.updateJobConfiguration(ResourceToAdminMapper.map(jobConfiguration));
+        this.adminService.updateJobConfiguration(ResourceToDomainMapper.map(jobConfiguration));
     }
 
     @Override
@@ -62,16 +62,16 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public JobConfigurations getJobConfigurationsByJobName(final String jobName) {
-        final Collection<org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration> jobConfigurations = this.adminService.getJobConfigurationsByJobName(jobName);
-        return AdminToResourceMapper.map(jobConfigurations);
+        final Collection<org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration> jobConfigurations = this.adminService.getJobConfigurationsByJobName(jobName);
+        return DomainToResourceMapper.map(jobConfigurations);
     }
 
     @Override
     public Map<String, JobConfigurations> getJobConfigurationMap(final Collection<String> jobNames) {
-        final Map<String, Collection<org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration>> jobConfigurationMap = this.adminService.getJobConfigurationMap(jobNames);
+        final Map<String, Collection<org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration>> jobConfigurationMap = this.adminService.getJobConfigurationMap(jobNames);
         final Map<String, JobConfigurations> response = new HashMap<>();
-        for (final Map.Entry<String, Collection<org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration>> entry : jobConfigurationMap.entrySet()) {
-            final JobConfigurations jobConfigurations = AdminToResourceMapper.map(entry.getValue());
+        for (final Map.Entry<String, Collection<org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration>> entry : jobConfigurationMap.entrySet()) {
+            final JobConfigurations jobConfigurations = DomainToResourceMapper.map(entry.getValue());
             response.put(entry.getKey(), jobConfigurations);
         }
         return response;
@@ -79,12 +79,12 @@ public class ControllerServiceEntryBean implements ServiceEntry {
 
     @Override
     public JobConfigurations getJobConfigurations(final Collection<String> jobNames) {
-        return AdminToResourceMapper.map(this.adminService.getJobConfigurations(jobNames));
+        return DomainToResourceMapper.map(this.adminService.getJobConfigurations(jobNames));
     }
 
     @Override
     public JobConfiguration getJobConfigurationById(final Long jobConfigurationId) {
-        return AdminToResourceMapper.map(this.adminService.getJobConfigurationById(jobConfigurationId));
+        return DomainToResourceMapper.map(this.adminService.getJobConfigurationById(jobConfigurationId));
     }
 
     @Override

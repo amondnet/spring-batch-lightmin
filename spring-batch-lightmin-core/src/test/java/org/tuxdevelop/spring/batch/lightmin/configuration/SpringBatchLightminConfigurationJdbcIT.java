@@ -20,7 +20,7 @@ public class SpringBatchLightminConfigurationJdbcIT {
     private SpringBatchLightminConfigurator configurator;
 
     @Test
-    public void initJdbcIT() throws Exception {
+    public void initJdbcIT() {
         assertThat(this.configurator.getLightminJobExecutionDao()).isInstanceOf(JdbcLightminJobExecutionDao.class);
         assertThat(this.configurator.getRepositoryTablePrefix()).isEqualTo(AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX);
     }

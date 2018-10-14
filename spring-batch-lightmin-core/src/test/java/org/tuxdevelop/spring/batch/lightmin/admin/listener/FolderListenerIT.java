@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobIncrementer;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobListenerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.ListenerConstructorWrapper;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobIncrementer;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobListenerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.ListenerConstructorWrapper;
 import org.tuxdevelop.spring.batch.lightmin.util.BeanRegistrar;
 import org.tuxdevelop.test.configuration.ITConfiguration;
 

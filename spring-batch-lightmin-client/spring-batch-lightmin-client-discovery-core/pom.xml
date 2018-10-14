@@ -19,6 +19,12 @@
             <artifactId>spring-batch-lightmin-client-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- spring cloud -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-commons</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

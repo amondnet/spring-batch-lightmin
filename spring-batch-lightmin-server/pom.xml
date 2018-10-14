@@ -16,7 +16,13 @@
         <!-- lightmin -->
         <dependency>
             <groupId>org.tuxdevelop</groupId>
-            <artifactId>spring-batch-lightmin-client</artifactId>
+            <artifactId>spring-batch-lightmin-client-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-client-classic</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -28,9 +34,29 @@
 
         <dependency>
             <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
             <artifactId>spring-batch-lightmin-repository-server</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-test-domain</artifactId>
+            <version>${project.version}</version>
+            <scope>tets</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.tuxdevelop</groupId>
+            <artifactId>spring-batch-lightmin-test-api</artifactId>
+            <version>${project.version}</version>
+            <scope>tets</scope>
         </dependency>
 
         <!-- spring boot -->
@@ -47,6 +73,11 @@
         </dependency>
 
         <!-- spring cloud -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-commons</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>

@@ -5,11 +5,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.tuxdevelop.spring.batch.lightmin.TestHelper;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerConfiguration;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.JobSchedulerType;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobSchedulerConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.domain.JobSchedulerType;
 import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.test.domain.DomainTestHelper;
 import org.tuxdevelop.test.configuration.ITConfiguration;
 
 import java.util.Collection;
@@ -31,9 +31,9 @@ public class DefaultAdminServiceIT {
     public void testDeleteJobConfiguration() {
         final String jobName = "simpleJob";
         final JobSchedulerConfiguration jobSchedulerConfiguration =
-                TestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
+                DomainTestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
                         JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
         this.adminService.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();
@@ -60,9 +60,9 @@ public class DefaultAdminServiceIT {
     public void testUpdateJobConfiguration() {
         final String jobName = "simpleJob";
         final JobSchedulerConfiguration jobSchedulerConfiguration =
-                TestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
+                DomainTestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
                         JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = DomainTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
         this.adminService.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();

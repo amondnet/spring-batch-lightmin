@@ -10,7 +10,7 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.tuxdevelop.spring.batch.lightmin.admin.domain.TaskExecutorType;
+import org.tuxdevelop.spring.batch.lightmin.domain.TaskExecutorType;
 
 import java.util.Date;
 import java.util.Map;

@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.client.discovery.configuration;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.tuxdevelop.spring.batch.lightmin.client.service.LightminServerLocator
  */
 @Configuration
 @Import(value = {LightminClientConfiguration.class})
+@EnableConfigurationProperties(value = {LightminClientDiscoveryProperties.class})
 @AutoConfigureAfter({SimpleDiscoveryClientAutoConfiguration.class})
 public class LightminClientDiscoveryConfiguration {
 
@@ -37,8 +39,8 @@ public class LightminClientDiscoveryConfiguration {
 
     @Bean
     public LightminServerLocatorService discoveryLightminServerLocator(
-            final LightminClientProperties lightminClientProperties,
+            final LightminClientDiscoveryProperties lightminClientDiscoveryProperties,
             final DiscoveryClient discoveryClient) {
-        return new DiscoveryLightminServerLocatorService(lightminClientProperties, discoveryClient);
+        return new DiscoveryLightminServerLocatorService(lightminClientDiscoveryProperties, discoveryClient);
     }
 }

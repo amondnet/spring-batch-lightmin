@@ -22,9 +22,7 @@ import java.util.Collections;
  * @since 0.3
  */
 @Configuration
-@EnableConfigurationProperties(value = {
-        LightminClientProperties.class,
-        LightminClientServerProperties.class})
+@EnableConfigurationProperties(value = {LightminClientProperties.class})
 @Import(value = {CommonSpringBatchLightminConfiguration.class})
 public class LightminClientConfiguration {
 
@@ -37,8 +35,9 @@ public class LightminClientConfiguration {
             matchIfMissing = true)
     public JobExecutionEventPublisher jobExecutionEventPublisher(
             final LightminServerLocatorService lightminServerLocatorService,
-            final LightminClientServerProperties lightminProperties) {
-        final RestTemplate restTemplate = LightminServerRestTemplateFactory.getRestTemplate(lightminProperties);
+            final LightminClientProperties lightminClientProperties) {
+        final RestTemplate restTemplate = LightminServerRestTemplateFactory.getRestTemplate(
+                lightminClientProperties.getServer());
         return new JobExecutionEventPublisher(restTemplate, lightminServerLocatorService);
     }
 
@@ -60,11 +59,13 @@ public class LightminClientConfiguration {
         return new LightminClientApplicationRestController(lightminClientApplicationService);
     }
 
+
     public static class LightminServerRestTemplateFactory {
 
         private static RestTemplate restTemplate;
 
-        public static RestTemplate getRestTemplate(final LightminClientServerProperties lightminProperties) {
+        public static RestTemplate getRestTemplate(
+                final LightminClientProperties.ClientServerProperties lightminProperties) {
 
             if (restTemplate == null) {
                 restTemplate = new RestTemplate();
@@ -79,4 +80,5 @@ public class LightminClientConfiguration {
             return restTemplate;
         }
     }
+
 }

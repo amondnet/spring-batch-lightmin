@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.tuxdevelop.spring.batch.lightmin.TestHelper;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobConfigurations;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerConfiguration;
@@ -13,6 +12,7 @@ import org.tuxdevelop.spring.batch.lightmin.api.resource.admin.JobSchedulerType;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameter;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.JobParameters;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.common.ParameterType;
+import org.tuxdevelop.spring.batch.lightmin.test.api.ApiTestHelper;
 import org.tuxdevelop.test.configuration.ITMapConfiguration;
 
 import java.util.Collection;
@@ -32,9 +32,9 @@ public class ControllerServiceEntryBeanIT {
     @Test
     public void testSaveJobConfiguration() {
         final String jobName = "simpleJob";
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
+        final JobSchedulerConfiguration jobSchedulerConfiguration = ApiTestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
                 JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = ApiTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
         this.serviceEntry.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();
@@ -48,9 +48,9 @@ public class ControllerServiceEntryBeanIT {
     @Test
     public void testUpdateJobConfiguration() {
         final String jobName = "simpleJob";
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
+        final JobSchedulerConfiguration jobSchedulerConfiguration = ApiTestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
                 JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = ApiTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
         this.serviceEntry.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();
@@ -82,9 +82,9 @@ public class ControllerServiceEntryBeanIT {
     @Test
     public void testDeleteJobConfiguration() {
         final String jobName = "simpleJob";
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
+        final JobSchedulerConfiguration jobSchedulerConfiguration = ApiTestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
                 JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = ApiTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
         this.serviceEntry.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();
@@ -102,9 +102,9 @@ public class ControllerServiceEntryBeanIT {
     @Test
     public void testGetJobConfigurationsByJobName() {
         final String jobName = "simpleJob";
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
+        final JobSchedulerConfiguration jobSchedulerConfiguration = ApiTestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
                 JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = ApiTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
         this.serviceEntry.saveJobConfiguration(jobConfiguration);
         final JobConfigurations fetchedJobConfigurations = this.serviceEntry.getJobConfigurationsByJobName(jobName);
@@ -118,9 +118,9 @@ public class ControllerServiceEntryBeanIT {
     @Test
     public void testGetJobConfigurationMap() {
         final String jobName = "simpleJob";
-        final JobSchedulerConfiguration jobSchedulerConfiguration = TestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
+        final JobSchedulerConfiguration jobSchedulerConfiguration = ApiTestHelper.createJobSchedulerConfiguration(null, 10L, 10L,
                 JobSchedulerType.PERIOD);
-        final JobConfiguration jobConfiguration = TestHelper.createJobConfiguration(jobSchedulerConfiguration);
+        final JobConfiguration jobConfiguration = ApiTestHelper.createJobConfiguration(jobSchedulerConfiguration);
         jobConfiguration.setJobName(jobName);
         this.serviceEntry.saveJobConfiguration(jobConfiguration);
         final Collection<String> jobNames = new LinkedList<>();

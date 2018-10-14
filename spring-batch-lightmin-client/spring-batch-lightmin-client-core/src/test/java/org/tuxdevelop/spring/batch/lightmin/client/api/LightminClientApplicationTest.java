@@ -1,12 +1,12 @@
 package org.tuxdevelop.spring.batch.lightmin.client.api;
 
-import org.tuxdevelop.spring.batch.lightmin.client.PojoTestBase;
+import org.tuxdevelop.spring.batch.lightmin.test.PojoTestBase;
 
 public class LightminClientApplicationTest extends PojoTestBase {
 
     @Override
     public void performPojoTest() {
-        testStructureAndBehavior(LightminClientApplication.class);
-        testEquals(LightminClientApplication.class);
+        this.testStructureAndBehavior(LightminClientApplication.class);
+        this.testEquals(LightminClientApplication.class);
     }
 }
