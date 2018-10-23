@@ -12,7 +12,7 @@ import org.springframework.cloud.consul.serviceregistry.ConsulRegistrationCustom
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.tuxdevelop.spring.batch.lightmin.client.discovery.annotation.EnableLightminClientDiscoveryCore;
 import org.tuxdevelop.spring.batch.lightmin.client.discovery.metadata.ConsulMetaDataExtender;
 import org.tuxdevelop.spring.batch.lightmin.client.discovery.metadata.MetaDataExtender;
 
@@ -20,7 +20,7 @@ import java.util.List;
 
 @Configuration
 @ConditionalOnConsulEnabled
-@Import(value = {LightminClientDiscoveryConfiguration.class})
+@EnableLightminClientDiscoveryCore
 @ConditionalOnClass(ConsulDiscoveryClient.class)
 public class ConsulLightminClientDiscoveryConfiguration {
 

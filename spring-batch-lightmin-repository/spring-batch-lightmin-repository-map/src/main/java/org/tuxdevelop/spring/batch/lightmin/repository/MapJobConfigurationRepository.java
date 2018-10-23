@@ -58,7 +58,8 @@ public class MapJobConfigurationRepository implements JobConfigurationRepository
     public Collection<JobConfiguration> getJobConfigurations(final String jobName, final String applicationName) throws NoSuchJobException, NoSuchJobConfigurationException {
         final Map<String, Map<Long, JobConfiguration>> applicationJobConfigurations = this.getJobConfigurationsForApplicationName(applicationName);
         if (applicationJobConfigurations.containsKey(jobName)) {
-            return applicationJobConfigurations.get(jobName).values();
+            final Collection<JobConfiguration> jcs = applicationJobConfigurations.get(jobName).values();
+            return new ArrayList<>(jcs);
         } else {
             final String message = "No jobConfigurations found for jobName: " + jobName;
             log.error(message);

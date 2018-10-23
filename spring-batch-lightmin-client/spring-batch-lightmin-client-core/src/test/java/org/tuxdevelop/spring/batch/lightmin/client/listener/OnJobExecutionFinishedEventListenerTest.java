@@ -10,9 +10,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
-import org.tuxdevelop.spring.batch.lightmin.admin.event.JobExecutionEvent;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
-import org.tuxdevelop.spring.batch.lightmin.client.event.JobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.client.event.RemoteJobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.event.JobExecutionEvent;
 
 import static org.mockito.Matchers.any;
 
@@ -22,7 +22,7 @@ public class OnJobExecutionFinishedEventListenerTest {
     private OnJobExecutionFinishedEventListener onJobExecutionFinishedEventListener;
 
     @Mock
-    private JobExecutionEventPublisher jobExecutionEventPublisher;
+    private RemoteJobExecutionEventPublisher jobExecutionEventPublisher;
 
     @Test
     public void testOnApplicationEventJobExecution() {

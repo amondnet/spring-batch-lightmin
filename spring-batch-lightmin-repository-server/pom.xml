@@ -22,12 +22,6 @@
 
         <dependency>
             <groupId>org.tuxdevelop</groupId>
-            <artifactId>spring-batch-lightmin-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.tuxdevelop</groupId>
             <artifactId>spring-batch-lightmin-repository-core</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -36,21 +30,14 @@
             <groupId>org.tuxdevelop</groupId>
             <artifactId>spring-batch-lightmin-repository-remote</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.tuxdevelop</groupId>
             <artifactId>spring-batch-lightmin-repository-map</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.tuxdevelop</groupId>
-            <artifactId>spring-batch-lightmin-repository-jdbc</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

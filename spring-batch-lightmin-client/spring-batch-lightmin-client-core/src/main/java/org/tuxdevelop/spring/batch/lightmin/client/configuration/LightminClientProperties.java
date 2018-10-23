@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.StringUtils;
 
 import java.net.InetAddress;
@@ -49,6 +50,7 @@ public class LightminClientProperties {
     private final String healthEndpointId;
     @Getter
     @Setter
+    @NestedConfigurationProperty
     private ClientServerProperties server = new ClientServerProperties();
 
     private final ManagementServerProperties managementServerProperties;

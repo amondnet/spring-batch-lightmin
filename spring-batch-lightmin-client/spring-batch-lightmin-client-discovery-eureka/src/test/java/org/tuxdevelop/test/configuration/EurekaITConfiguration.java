@@ -2,13 +2,12 @@ package org.tuxdevelop.test.configuration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.Import;
-import org.tuxdevelop.spring.batch.lightmin.client.discovery.configuration.EurekaLightminClientDiscoveryConfiguration;
+import org.tuxdevelop.spring.batch.lightmin.client.discovery.annotation.EnableLightminClientEureka;
+import org.tuxdevelop.spring.batch.lightmin.repository.annotation.EnableLightminMapConfigurationRepository;
 
 @EnableAutoConfiguration
-@EnableDiscoveryClient
-@Import(value = {EurekaLightminClientDiscoveryConfiguration.class})
+@EnableLightminClientEureka
+@EnableLightminMapConfigurationRepository
 public class EurekaITConfiguration {
 
     public static void main(final String[] args) {

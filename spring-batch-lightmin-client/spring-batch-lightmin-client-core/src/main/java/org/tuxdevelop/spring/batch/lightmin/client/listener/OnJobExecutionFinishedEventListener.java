@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.context.ApplicationListener;
-import org.tuxdevelop.spring.batch.lightmin.admin.event.EventTransformer;
-import org.tuxdevelop.spring.batch.lightmin.admin.event.JobExecutionEvent;
 import org.tuxdevelop.spring.batch.lightmin.api.resource.monitoring.JobExecutionEventInfo;
 import org.tuxdevelop.spring.batch.lightmin.client.event.JobExecutionEventPublisher;
+import org.tuxdevelop.spring.batch.lightmin.event.EventTransformer;
+import org.tuxdevelop.spring.batch.lightmin.event.JobExecutionEvent;
 
 /**
  * @author Marcel Becker

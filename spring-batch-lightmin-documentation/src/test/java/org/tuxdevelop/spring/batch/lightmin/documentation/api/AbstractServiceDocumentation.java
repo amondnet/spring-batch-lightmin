@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.documentation.api;
 
 import com.jayway.restassured.builder.RequestSpecBuilder;
 import com.jayway.restassured.specification.RequestSpecification;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -22,10 +23,11 @@ import org.tuxdevelop.spring.batch.lightmin.client.classic.configuration.Lightmi
 import org.tuxdevelop.spring.batch.lightmin.client.classic.service.LightminClientRegistratorService;
 import org.tuxdevelop.spring.batch.lightmin.client.configuration.LightminClientProperties;
 import org.tuxdevelop.spring.batch.lightmin.domain.*;
-import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerProperties;
+import org.tuxdevelop.spring.batch.lightmin.exception.SpringBatchLightminApplicationException;
+import org.tuxdevelop.spring.batch.lightmin.server.configuration.LightminServerCoreProperties;
 import org.tuxdevelop.spring.batch.lightmin.server.support.RegistrationBean;
 import org.tuxdevelop.spring.batch.lightmin.service.AdminService;
-import org.tuxdevelop.spring.batch.lightmin.support.ServiceEntry;
+import org.tuxdevelop.spring.batch.lightmin.service.ServiceEntry;
 import org.tuxdevelop.test.configuration.ITJobConfiguration;
 
 import java.util.Arrays;
@@ -36,8 +38,11 @@ import java.util.Set;
 import static org.junit.Assert.fail;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 
+@Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {ITConfigurationApplication.class, ITJobConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        classes = {ITConfigurationApplication.class, ITJobConfiguration.class},
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractServiceDocumentation {
 
     @Autowired
@@ -55,7 +60,7 @@ public abstract class AbstractServiceDocumentation {
     @Autowired
     protected LightminClientClassicConfigurationProperties lightminProperties;
     @Autowired
-    protected LightminServerProperties lightminServerProperties;
+    protected LightminServerCoreProperties lightminServerCoreProperties;
     @Autowired
     protected LightminClientRegistratorService lightminClientRegistrator;
     @Autowired
@@ -64,7 +69,6 @@ public abstract class AbstractServiceDocumentation {
     protected JobExplorer jobExplorer;
     @Autowired
     protected RegistrationBean registrationBean;
-
     protected MyThread myThread;
     @LocalServerPort
     private Integer serverPort;
@@ -190,8 +194,21 @@ public abstract class AbstractServiceDocumentation {
                 (Arrays.asList(this.simpleJob.getName()), this.lightminClientProperties);
     }
 
+
+    protected void cleanUp() {
+        try {
+            final Collection<JobConfiguration> allJC = this.adminService.getJobConfigurationsByJobName("simpleJob");
+            for (final JobConfiguration jobConfiguration : allJC) {
+                this.adminService.deleteJobConfiguration(jobConfiguration.getJobConfigurationId());
+            }
+        } catch (final SpringBatchLightminApplicationException e) {
+            log.warn("Repository clean up failed");
+        }
+    }
+
     @Before
     public void init() {
+        this.cleanUp();
         final int port = this.embeddedWebApplicationContext.getEmbeddedServletContainer().getPort();
         this.lightminClientProperties.setServiceUrl("http://localhost:" + port);
         this.lightminClientProperties.setServerPort(port);

@@ -15,7 +15,7 @@
         <!-- spring batch lightmin -->
         <dependency>
             <groupId>org.tuxdevelop</groupId>
-            <artifactId>spring-batch-lightmin-core</artifactId>
+            <artifactId>spring-batch-lightmin-core-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
 

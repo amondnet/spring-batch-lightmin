@@ -5,13 +5,13 @@ import com.netflix.discovery.EurekaClientConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.tuxdevelop.spring.batch.lightmin.client.discovery.annotation.EnableLightminClientDiscoveryCore;
 import org.tuxdevelop.spring.batch.lightmin.client.discovery.lifecycle.LightminEurekaClientConfigBean;
 import org.tuxdevelop.spring.batch.lightmin.client.discovery.metadata.EurekaMetaDataExtender;
 import org.tuxdevelop.spring.batch.lightmin.client.discovery.metadata.MetaDataExtender;
 
 @Configuration
-@Import(value = {LightminClientDiscoveryConfiguration.class})
+@EnableLightminClientDiscoveryCore
 @ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
 public class EurekaLightminClientDiscoveryConfiguration {
 

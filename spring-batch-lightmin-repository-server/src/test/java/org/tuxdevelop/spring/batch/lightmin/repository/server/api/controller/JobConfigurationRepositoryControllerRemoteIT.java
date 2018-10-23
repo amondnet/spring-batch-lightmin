@@ -13,7 +13,7 @@ import org.tuxdevelop.spring.batch.lightmin.repository.RemoteJobConfigurationRep
 import org.tuxdevelop.spring.batch.lightmin.repository.RemoteJobConfigurationRepositoryLocator;
 import org.tuxdevelop.spring.batch.lightmin.repository.configuration.RemoteJobConfigurationRepositoryConfigurationProperties;
 import org.tuxdevelop.spring.batch.lightmin.test.util.ITJobConfigurationRepository;
-import org.tuxdevelop.test.configuration.RemoteIntegrationTestConfiguration;
+import org.tuxdevelop.test.configuration.remote.RemoteIntegrationTestConfiguration;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {RemoteIntegrationTestConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

@@ -2,6 +2,7 @@ package org.tuxdevelop.spring.batch.lightmin.client.classic.configuration;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @Data
 @ConfigurationProperties(prefix = "spring.batch.lightmin.client.classic")
@@ -12,6 +13,7 @@ public class LightminClientClassicConfigurationProperties {
     private boolean registerOnce = Boolean.FALSE;
     private Long period = 10000L;
 
+    @NestedConfigurationProperty
     private LightminClientServerProperties server = new LightminClientServerProperties();
 
     @Data
