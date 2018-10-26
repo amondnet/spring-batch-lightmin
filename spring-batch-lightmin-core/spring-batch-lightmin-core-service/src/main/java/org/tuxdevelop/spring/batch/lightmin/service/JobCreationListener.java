@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.domain.ListenerStatus;
 import org.tuxdevelop.spring.batch.lightmin.domain.SchedulerStatus;
@@ -22,7 +22,7 @@ import java.util.Map;
  * @since 0.1
  */
 @Slf4j
-public class JobCreationListener implements ApplicationListener<ContextRefreshedEvent> {
+public class JobCreationListener implements ApplicationListener<ApplicationReadyEvent> {
 
     private final ApplicationContext applicationContext;
     private final JobRegistry jobRegistry;
@@ -46,7 +46,7 @@ public class JobCreationListener implements ApplicationListener<ContextRefreshed
     }
 
     @Override
-    public void onApplicationEvent(final ContextRefreshedEvent applicationEvent) {
+    public void onApplicationEvent(final ApplicationReadyEvent applicationEvent) {
         // register jobs of the current application context
         final Map<String, Job> jobs = this.applicationContext.getBeansOfType(Job.class);
         if (jobs != null) {

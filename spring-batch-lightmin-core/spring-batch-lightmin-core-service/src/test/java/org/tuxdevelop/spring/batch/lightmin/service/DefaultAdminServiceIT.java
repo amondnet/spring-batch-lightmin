@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.tuxdevelop.spring.batch.lightmin.domain.JobConfiguration;
 import org.tuxdevelop.spring.batch.lightmin.domain.JobSchedulerConfiguration;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.fail;
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = ITConfiguration.class)
+@SpringBootTest(classes = ITConfiguration.class)
 public class DefaultAdminServiceIT {
 
     private static final String JOB_NAME = "simpleJob";
